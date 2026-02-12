@@ -4,15 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 # from app.routers import employees, customers, auth
 from app.models import employees
-from app.models import customers
 from app.models import cars
+
 
 app = FastAPI(
     title="Arabity System",
     version="1.0.0"
 )
 
+# Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
+
 
 app.add_middleware(
     CORSMiddleware,

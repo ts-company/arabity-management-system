@@ -40,16 +40,19 @@ def add_employee(db: Session,
 
 def edit_employee(
     db: Session,
-    employee_username: str,
+    id: int,
+    username: str = None,
     salary: Decimal = None,
     password: str = None,
     role: str = None,
     target: int = None
 ):
-    employee = db.query(Employee).filter(Employee.username == employee_username).first()
+    employee = db.query(Employee).filter(Employee.id == id).first()
     if not employee:
         return None
 
+    if username is not None:
+        employee.username = username
     if salary is not None:
         employee.salary = salary
     if password is not None:
