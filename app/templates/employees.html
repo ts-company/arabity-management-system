@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إدارة الموظفين</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+header h1 {
+    font-size: 24px;
+}
+header a {
+    color: #cbd5e1;
+    text-decoration: none;
+}
+header a:hover { color: #ffffff; text-decoration: underline; }
+.form-section, .table-section {
+    background-color: rgba(30,30,50,0.8);
+    border: 1px solid rgba(100,100,120,0.5);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.form-section h2, .table-section h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 10px;
+    align-items: end;
+}
+input, select, button {
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+input, select {
+    width: 100%;
+    background-color: rgba(15,23,42,0.7);
+    color: #f1f5f9;
+}
+button {
+    cursor: pointer;
+    font-weight: bold;
+}
+button.add { background: linear-gradient(to left, #34d399, #14b8a6); color: #000; }
+button.add:hover { opacity: 0.9; }
+button.edit { background-color: #facc15; color: #000; }
+button.delete { background-color: #f87171; color: #000; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    padding: 8px;
+    text-align: right;
+    border-bottom: 1px solid rgba(100,100,120,0.5);
+}
+tr:hover { background-color: rgba(100,100,150,0.2); }
+.edit-form-inline {
+    display: none;
+    gap: 5px;
+    margin-top: 5px;
+}
+.error { color: #f87171; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+    <h1>إدارة الموظفين</h1>
+    <a href="/admin">رجوع إلى لوحة التحكم</a>
+</header>
+
+<div class="error" id="error"></div>
+
+<div class="form-section">
+    <h2>إضافة مستخدم جديد</h2>
+    <div class="form-grid">
+        <input type="text" id="newName" placeholder="الاسم">
+        <input type="text" id="newUsername" placeholder="اسم المستخدم">
+        <input type="password" id="newPassword" placeholder="كلمة المرور">
+        <input type="tel" id="newPhone" placeholder="رقم الهاتف">
+        <select id="newRole">
+            <option value="" disabled selected>الدور</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="sales">Sales</option>
+            <option value="accountant">Accountant</option>
+            <option value="receptionist">Receptionist</option>
+            <option value="delivery">Delivery</option>
+        </select>
+        <input type="number" id="newSalary" placeholder="الراتب">
+        <input type="number" id="newTarget" placeholder="الهدف">
+        <button class="add" id="addEmployeeBtn">إضافة</button>
+    </div>
+</div>
+
+<div class="form-section">
+    <h2>بحث الموظفين</h2>
+    <input type="text" id="searchInput" placeholder="ابحث باسم الموظف" style="width:100%; margin-top:5px; margin-bottom:10px;">
+</div>
+
+<div class="table-section">
+    <h2>قائمة الموظفين</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الاسم</th>
+                <th>اسم المستخدم</th>
+                <th>رقم الهاتف</th>
+                <th>الدور</th>
+                <th>الراتب</th>
+                <th>الهدف</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="employeesTableBody"></tbody>
+    </table>
+</div>
+</div>
+
+<script>
+const errorDiv = document.getElementById("error");
+let allEmployees = [];
+
+// Load employees
+async function loadEmployees() {
+    errorDiv.textContent = "";
+    const tbody = document.getElementById("employeesTableBody");
+    tbody.innerHTML = "";
+    try {
+        const res = await fetch("/employees/get_employees", { credentials: "include" });
+        if(!res.ok) { const data = await res.json(); errorDiv.textContent = data.detail || "فشل في تحميل الموظفين"; return; }
+        allEmployees = await res.json();
+        renderEmployees(allEmployees);
+    } catch(e){ errorDiv.textContent = "حدث خطأ: "+e.message; }
+}
+
+// Render table
+function renderEmployees(employees) {
+    const tbody = document.getElementById("employeesTableBody");
+    tbody.innerHTML = "";
+    employees.forEach(emp => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${emp.id}</td>
+            <td>${emp.name}</td>
+            <td>${emp.username}</td>
+            <td>${emp.phone_number || '-'}</td>
+            <td>${emp.role || '-'}</td>
+            <td>${emp.salary ?? '-'}</td>
+            <td>${emp.target ?? '-'}</td>
+            <td>
+                <button class="edit" onclick="toggleEditForm(${emp.id})">تعديل</button>
+                <button class="delete" onclick="deleteEmployee(${emp.id})">حذف</button>
+            </td>
+        `;
+        const editTr = document.createElement("tr");
+        const editTd = document.createElement("td");
+        editTd.colSpan = 8;
+        editTd.innerHTML = `
+            <div class="edit-form-inline" id="edit-form-${emp.id}">
+                <input type="text" id="editName-${emp.id}" placeholder="اسم المستخدم" value="${emp.name}">
+                <input type="text" id="editUsername-${emp.id}" placeholder="اسم المستخدم" value="${emp.username}">
+                <input type="tel" id="editPhone-${emp.id}" placeholder="رقم الهاتف" value="${emp.phone_number || ''}">
+                <select id="editRole-${emp.id}">
+                    <option value="admin" ${emp.role==='admin'?'selected':''}>Admin</option>
+                    <option value="manager" ${emp.role==='manager'?'selected':''}>Manager</option>
+                    <option value="sales" ${emp.role==='sales'?'selected':''}>Sales</option>
+                    <option value="accountant" ${emp.role==='accountant'?'selected':''}>Accountant</option>
+                    <option value="receptionist" ${emp.role==='receptionist'?'selected':''}>Receptionist</option>
+                    <option value="delivery" ${emp.role==='delivery'?'selected':''}>Delivery</option>
+                </select>
+                <input type="number" id="editSalary-${emp.id}" placeholder="الراتب" value="${emp.salary || ''}">
+                <input type="number" id="editTarget-${emp.id}" placeholder="الهدف" value="${emp.target || ''}">
+                <input type="password" id="editPassword-${emp.id}" placeholder="كلمة المرور (اتركها كما هي)">
+                <button onclick="saveEmployee(${emp.id})">حفظ</button>
+                <button onclick="toggleEditForm(${emp.id})">إلغاء</button>
+            </div>
+        `;
+        editTr.appendChild(editTd);
+        tbody.appendChild(tr);
+        tbody.appendChild(editTr);
+    });
+}
+
+// Toggle inline edit form
+function toggleEditForm(id) {
+    const f = document.getElementById(`edit-form-${id}`);
+    f.style.display = f.style.display === "flex" || f.style.display === "block" ? "none" : "flex";
+}
+
+// Save employee edit
+async function saveEmployee(id){
+    const data = {};
+    const name = document.getElementById(`editName-${id}`).value;
+    if(name) data.name = name;
+    const username = document.getElementById(`editUsername-${id}`).value;
+    if(username) data.username = username;
+    const phone = document.getElementById(`editPhone-${id}`).value;
+    if(phone) data.phone_number = phone;
+    const role = document.getElementById(`editRole-${id}`).value;
+    if(role) data.role = role;
+    const salary = document.getElementById(`editSalary-${id}`).value;
+    if(salary) data.salary = parseFloat(salary);
+    const target = document.getElementById(`editTarget-${id}`).value;
+    if(target) data.target = parseFloat(target);
+    const password = document.getElementById(`editPassword-${id}`).value;
+    if(password) data.password = password;
+
+    try{
+        const res = await fetch(`/employees/edit_employee/${id}`, {
+            method: "PUT",
+            headers: {"Content-Type":"application/json"},
+            credentials: "include",
+            body: JSON.stringify(data)
+        });
+        if(!res.ok){ const e = await res.json(); errorDiv.textContent = e.detail||"فشل في حفظ التغييرات"; return; }
+        loadEmployees();
+    }catch(e){ errorDiv.textContent = "حدث خطأ: "+e.message; }
+}
+
+// Delete
+async function deleteEmployee(id){
+    if(!confirm("هل أنت متأكد من الحذف؟")) return;
+    try{
+        const res = await fetch(`/employees/delete_employee/${id}`, { method:"DELETE", credentials:"include" });
+        if(!res.ok){ const e=await res.json(); errorDiv.textContent = e.detail||"فشل الحذف"; return; }
+        loadEmployees();
+    }catch(e){ errorDiv.textContent = "حدث خطأ: "+e.message; }
+}
+
+// Add new employee
+document.getElementById("addEmployeeBtn").addEventListener("click", async ()=>{
+    const data = {
+        name: document.getElementById("newName").value,
+        username: document.getElementById("newUsername").value,
+        password: document.getElementById("newPassword").value,
+        phone_number: document.getElementById("newPhone").value,
+        role: document.getElementById("newRole").value,
+        salary: parseFloat(document.getElementById("newSalary").value),
+        target: parseFloat(document.getElementById("newTarget").value)
+    };
+    try{
+        const res = await fetch("/employees/add_employee", { 
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            credentials:"include",
+            body: JSON.stringify(data)
+        });
+        if(!res.ok){ const e=await res.json(); errorDiv.textContent = e.detail||"فشل الإضافة"; return; }
+        document.getElementById("newName").value="";
+        document.getElementById("newUsername").value="";
+        document.getElementById("newPassword").value="";
+        document.getElementById("newPhone").value="";
+        document.getElementById("newRole").value="";
+        document.getElementById("newSalary").value="";
+        document.getElementById("newTarget").value="";
+        loadEmployees();
+    }catch(e){ errorDiv.textContent="حدث خطأ: "+e.message;}
+});
+
+// Search
+document.getElementById("searchInput").addEventListener("input", ()=>{
+    const q = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = allEmployees.filter(u=>u.name.toLowerCase().includes(q));
+    renderEmployees(filtered);
+});
+
+// Load on page load
+loadEmployees();
+</script>
+</body>
+</html>

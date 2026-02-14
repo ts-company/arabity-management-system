@@ -1,11 +1,15 @@
-from fastapi import APIRouter, Form, Header, Depends, HTTPException, status
+from fastapi import APIRouter, Form, Header, Depends, HTTPException, status, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from decimal import Decimal
-from app.utils.add_edit_employee import add_employee, edit_employee
-from app.utils.auth import get_current_user
-from app.database import get_db
+from utils.add_edit_employee import add_employee, edit_employee
+from utils.auth import get_current_user
+from models.employees_model import Employee
+from database import get_db
 
-router = APIRouter(prefix="employee")
+templates = Jinja2Templates(directory="templates")
+router = APIRouter(prefix="/employees")
 
 @router.post("/add_employee")
 def add_employees(
@@ -36,6 +40,7 @@ def edit_employees(
         authorization: str = Header(...),
         id: str = Form(...),
         username: str = Form(...),
+        phone_number: str = Form(...),
         salary: Decimal = Form(...),
         password: str = Form(...),
         role: str = Form(...),
@@ -47,7 +52,7 @@ def edit_employees(
     if payload["role"] != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Unauthorized request")
 
-    employee = edit_employee(db, id, username, salary, password, role, target)
+    employee = edit_employee(db, id, username, phone_number, salary, password, role, target)
     if not employee:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detaile="Employee doesn't exist")
     return {
@@ -55,3 +60,32 @@ def edit_employees(
         "name": employee.name,
         "username": employee.username
     }
+
+@router.get("/get_employees")
+def get_employees(db: Session = Depends(get_db)):
+    employees = db.query(Employee).all()
+
+    return [
+        {
+            "id": emp.id,
+            "name": emp.name,
+            "username": emp.username,
+            "phone_number": emp.phone_number,
+            "role": emp.role,
+            "salary": emp.salary,
+            "target": emp.target
+        }
+        for emp in employees
+    ]
+
+@router.get("/", response_class=HTMLResponse)
+def get_employees_page(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing token")
+
+    payload = get_current_user(token)
+    if payload["role"] != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    return templates.TemplateResponse("employees.html", {"request": request})

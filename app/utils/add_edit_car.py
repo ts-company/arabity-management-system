@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.cars import Car
+from models.cars_model import Car
 from decimal import Decimal
 from datetime import date
 

@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from jose import jwt, JWTError
-from app.utils.jwt import SECRET_KEY, ALGORITHM
+from utils.jwt import SECRET_KEY, ALGORITHM
 
 
 def get_current_user(token):

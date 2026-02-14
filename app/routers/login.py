@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Form, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
-from app.models import Employee
-from app.utils.password import verify_password
-from app.utils.jwt import create_access_token
-from app.database import get_db
+from models.employees_model import Employee
+from utils.password import verify_password
+from utils.jwt import create_access_token
+from database import get_db
 
 router = APIRouter()
 
@@ -13,12 +14,24 @@ async def login(username: str = Form(...),
                 db: Session = Depends(get_db)):
     user = db.query(Employee).filter(Employee.username == username).first()
     if not user or not verify_password(password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password"
-        )
+        return RedirectResponse(url="/?error=1", status_code=status.HTTP_302_FOUND)
     token = create_access_token({
         "sub": str(user.id),
         "role": user.role
     })
-    return {"access_token": token}
+
+    response = RedirectResponse(
+        url=f"/{user.role}",
+        status_code=status.HTTP_302_FOUND
+    )
+
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        samesite="lax",
+        secure=False,
+        path="/"
+    )
+
+    return response

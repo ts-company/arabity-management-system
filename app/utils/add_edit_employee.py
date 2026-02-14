@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.models.employees import Employee
-from app.utils.password import hash_password
+from models.employees_model import Employee
+from utils.password import hash_password
 from decimal import Decimal
 
 def add_employee(db: Session,
@@ -18,7 +18,7 @@ def add_employee(db: Session,
     if employee:
         raise HTTPException(
             status_code=400,
-            detail="Employee already exists"
+            detail="Username already exists"
         )
 
     hashed_password = hash_password(password)
@@ -42,6 +42,7 @@ def edit_employee(
     db: Session,
     id: int,
     username: str = None,
+    phone_number: str = None,
     salary: Decimal = None,
     password: str = None,
     role: str = None,
@@ -53,6 +54,8 @@ def edit_employee(
 
     if username is not None:
         employee.username = username
+    if phone_number is not None:
+        employee.phone_number = phone_number
     if salary is not None:
         employee.salary = salary
     if password is not None:

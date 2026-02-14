@@ -1,5 +1,5 @@
 from sqlalchemy import delete
-from app.models.employees import Employee
+from app.models.employees_model import Employee
 from app.database import  SessionLocal
 
 session = SessionLocal()

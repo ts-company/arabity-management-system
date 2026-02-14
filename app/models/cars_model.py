@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Numeric, Date
-from app.database import Base
+from database import Base
 
 class Car(Base):
     __tablename__ = "cars"
@@ -14,6 +14,7 @@ class Car(Base):
     color = Column(String, nullable=False)
     state = Column(String, nullable=False)
     price = Column(Numeric(12, 2), nullable=False)
+    mileage = Column(Numeric(12, 2), nullable=False)
     plate_number = Column(String, nullable=False)
     receive_date = Column(Date, nullable=False)
     delivery_date = Column(Date, nullable=True)

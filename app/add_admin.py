@@ -1,14 +1,14 @@
 from sqlalchemy import select
 from database import SessionLocal
-from models.employees import  Employee
+from models.employees_model import  Employee
 from sqlalchemy.exc import IntegrityError
 from app.utils.password import hash_password
 
 name = "Ahmed"
-username = "captain_ahmed@admin"
+username = "ahmedd"
 password = "password123"
-phone_number = "01146494815"
-role = "admin"
+phone_number = "011"
+role = "sales"
 
 session = SessionLocal()
 
