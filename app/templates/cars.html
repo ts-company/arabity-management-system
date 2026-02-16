@@ -12,7 +12,7 @@ body {
     margin: 0;
 }
 .container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: auto;
     padding: 20px;
 }
@@ -31,6 +31,7 @@ header a:hover { color: #fff; }
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 20px;
+    overflow-x: auto;
 }
 .form-grid {
     display: grid;
@@ -70,7 +71,6 @@ tr:hover { background-color: rgba(100,100,150,0.2); }
 <div class="container">
 <header>
     <h1>إدارة السيارات</h1>
-    <a href="http://localhost:8000/admin">رجوع إلى لوحة التحكم</a>
 </header>
 
 <div class="error" id="error"></div>
@@ -104,7 +104,10 @@ tr:hover { background-color: rgba(100,100,150,0.2); }
 
 <div class="form-section">
 <h2>بحث السيارات</h2>
-<input id="searchInput" placeholder="ابحث بالموديل" style="width:100%;">
+<div style="display:flex; gap:10px;">
+    <input id="searchInput" placeholder="ابحث بالموديل" style="width:50%;">
+    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف" style="width:50%;">
+</div>
 </div>
 
 <div class="table-section">
@@ -192,7 +195,11 @@ function renderCars(cars) {
                     <input value="${car.customer_phone_number || ""}" id="customer_phone-${car.id}">
                     <input value="${car.chassis_number || ""}" id="chassis-${car.id}">
                     <input value="${car.color || ""}" id="color-${car.id}">
-                    <input value="${car.state || ""}" id="state-${car.id}">
+                    <select value="${car.state || ""}" id="state-${car.id}">
+                        <option value="" disabled selected>الحالة</option>
+                        <option value="in stock">in stock</option>
+                        <option value="not available">not available</option>
+                    </select>
                     <input type="number" value="${car.price || ""}" id="price-${car.id}">
                     <input type="number" value="${car.mileage || ""}" id="mileage-${car.id}">
                     <input value="${car.plate_number || ""}" id="plate-${car.id}">
@@ -279,8 +286,14 @@ async function saveCar(id) {
     };
 
     for (const key in fields) {
-        const val = document.getElementById(fields[key]).value;
-        formData.append(key, val);
+        const el = document.getElementById(fields[key]);
+        if (!el) continue;
+
+        const val = el.value;
+
+        if (val !== "") {
+            formData.append(key, val);
+        }
     }
 
     try {
@@ -291,9 +304,11 @@ async function saveCar(id) {
         });
 
         if (!res.ok) {
-            errorDiv.textContent = "فشل التعديل";
+            const e = await res.json();
+            errorDiv.textContent = e.detail || "فشل التعديل";
             return;
         }
+
         errorDiv.textContent = "تم التعديل";
         toggleEdit(id);
         loadCars();
@@ -302,10 +317,20 @@ async function saveCar(id) {
     }
 }
 
-document.getElementById("searchInput").addEventListener("input", e => {
-    const q = e.target.value.toLowerCase();
-    renderCars(allCars.filter(c => c.model.toLowerCase().includes(q)));
-});
+function applySearch() {
+    const modelQuery = document.getElementById("searchInput").value.toLowerCase();
+    const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
+
+    renderCars(
+        allCars.filter(c =>
+            c.model.toLowerCase().includes(modelQuery) &&
+            (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
+        )
+    );
+}
+
+document.getElementById("searchInput").addEventListener("input", applySearch);
+document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
 
 loadCars();
 </script>

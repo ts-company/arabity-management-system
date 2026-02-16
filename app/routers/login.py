@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form, Depends, HTTPException, status
+from fastapi import APIRouter, Form, Depends, status, Request, Response
 from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from models.employees_model import Employee
@@ -35,3 +35,12 @@ async def login(username: str = Form(...),
     )
 
     return response
+
+@router.post("/logout")
+def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+    )
+
+    return {"message": "Logged out successfully"}

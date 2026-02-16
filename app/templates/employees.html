@@ -91,7 +91,6 @@ tr:hover { background-color: rgba(100,100,150,0.2); }
 <div class="container">
 <header>
     <h1>إدارة الموظفين</h1>
-    <a href="http://localhost:8000/admin">رجوع إلى لوحة التحكم</a>
 </header>
 
 <div class="error" id="error"></div>
@@ -190,10 +189,10 @@ function renderEmployees(employees) {
         editTd.colSpan = 8;
         editTd.innerHTML = `
             <div class="edit-form-inline" id="edit-form-${emp.id}">
-                <input type="text" name="name" id="editName-${emp.id}" placeholder="الاسم" value="${emp.name}">
-                <input type="text" name="username" id="editUsername-${emp.id}" placeholder="اسم المستخدم" value="${emp.username}">
-                <input type="tel" name="phone_number" id="editPhone-${emp.id}" placeholder="رقم الهاتف" value="${emp.phone_number || ''}">
-                <select name="role" id="editRole-${emp.id}">
+                <input required type="text" name="name" id="editName-${emp.id}" placeholder="الاسم" value="${emp.name}">
+                <input required type="text" name="username" id="editUsername-${emp.id}" placeholder="اسم المستخدم" value="${emp.username}">
+                <input required type="tel" name="phone_number" id="editPhone-${emp.id}" placeholder="رقم الهاتف" value="${emp.phone_number || ''}">
+                <select required name="role" id="editRole-${emp.id}">
                     <option value="admin" ${emp.role==='admin'?'selected':''}>Admin</option>
                     <option value="manager" ${emp.role==='manager'?'selected':''}>Manager</option>
                     <option value="sales" ${emp.role==='sales'?'selected':''}>Sales</option>
@@ -280,6 +279,12 @@ async function saveEmployee(id) {
     if (salary !== "") formData.append("salary", salary);
     if (target !== "") formData.append("target", target);
     if (password) formData.append("password", password);
+
+    for (const [key, value] of [...formData.entries()]) {
+        if (value === "") {
+            formData.delete(key);
+        }
+    }
 
     try {
         const res = await fetch(`http://localhost:8000/employees/edit_employee/${id}`, {
