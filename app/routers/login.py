@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Form, Depends, status, Request, Response
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi import APIRouter, Form, Depends, status, Response
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from models.employees_model import Employee
 from utils.password import verify_password

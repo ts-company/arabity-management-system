@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقايسة سيارة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+        
+        .min-h-screen {
+            background: transparent;
+        }
+
+        input, textarea, select {
+            background-color: rgba(15, 23, 42, 0.44);
+            border: 1px solid #475569;
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            color: #e2e8f0;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        button {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        canvas {
+            cursor: crosshair;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .md\:col-span-2 {
+                grid-column: span 2 / span 2;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .space-y-2 > * + * {
+            margin-top: 0.5rem;
+        }
+
+        .space-y-3 > * + * {
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-transparent px-4 py-8" dir="rtl">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center justify-between mb-6 text-slate-100">
+                <h1 class="text-2xl font-semibold">مقايسة سيارة</h1>
+            </div>
+
+            <div class="bg-slate-900/80 p-6 rounded-2xl text-slate-100 mb-6">
+                <h2 class="text-lg font-medium mb-4">مقايسة جديدة</h2>
+                <form id="comparisonForm" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-700 text-slate-300 flex flex-col justify-center">
+                        <div class="text-xs">اليوم</div>
+                        <div class="text-sm" id="dayDisplay"></div>
+                    </div>
+                    <div class="p-2 rounded-xl bg-slate-950/70 border border-slate-700 text-slate-300 flex flex-col justify-center">
+                        <div class="text-xs">التاريخ والوقت الحالي</div>
+                        <div class="text-sm"><span id="dateDisplay"></span> <span id="timeDisplay"></span></div>
+                    </div>
+                    <input id="customer" name="customer" placeholder="اسم العميل" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" required />
+                    <input id="receiptTime" name="receiptTime" type="date" placeholder="تاريخ الاستقبال" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    <input id="phone" name="phone" placeholder="رقم الهاتف" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    <input id="carType" name="carType" placeholder="نوع السيارة" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    <input id="carModel" name="carModel" placeholder="موديل السيارة" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" required />
+                    <input id="color" name="color" placeholder="اللون" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    <input id="vin" name="vin" placeholder="رقم الشاسيه (VIN)" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    <input id="plate" name="plate" placeholder="رقم اللوحة" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" required />
+                    <input id="odometer" name="odometer" placeholder="عداد السيارة (km)" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700" />
+                    
+                    <!-- Items Section -->
+                    <div class="md:col-span-2">
+                        <label class="text-sm font-semibold text-slate-200 block mb-3 bg-blue-900/30 p-2 rounded-lg">📋 البند</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2" id="itemsContainer"></div>
+                    </div>
+
+                    <!-- Descriptions Section -->
+                    <div class="md:col-span-2">
+                        <label class="text-sm font-semibold text-slate-200 block mb-3 bg-purple-900/30 p-2 rounded-lg">✏️ الوصف</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2" id="descriptionsContainer"></div>
+                    </div>
+
+                    <!-- Prices Section -->
+                    <div class="md:col-span-2">
+                        <label class="text-sm font-semibold text-slate-200 block mb-3 bg-amber-900/30 p-2 rounded-lg">💰 السعر</label>
+                        <div class="space-y-4" id="pricesContainer"></div>
+                    </div>
+
+                    <!-- Total Section -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-sky-500 via-blue-500 to-indigo-600 border-2 border-sky-300 text-white md:col-span-2 shadow-2xl shadow-blue-500/50">
+                        <div class="text-xs font-bold text-sky-100 uppercase mb-2 tracking-widest">🎯 الإجمالي النهائي</div>
+                        <div class="text-xl font-bold break-words text-white drop-shadow-lg" id="totalDisplay">✨ اختر من الخيارات أعلاه</div>
+                        <div class="mt-3">
+                            <label class="text-xs text-sky-100">السعر النهائي</label>
+                            <input id="finalPrice" name="finalPrice" class="w-full mt-1 p-2 rounded-lg text-slate-900" />
+                        </div>
+                    </div>
+
+                    <textarea id="notes" name="notes" placeholder="ملاحظات" class="p-2 rounded-xl bg-slate-950/70 border border-slate-700 md:col-span-2"></textarea>
+                    
+                    <div class="md:col-span-2 flex gap-3">
+                        <button type="submit" class="flex-1 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-3 font-semibold hover:from-emerald-700 hover:to-emerald-800 transition shadow-lg">💾 حفظ الآن</button>
+                    </div>
+
+                    <!-- Terms and Conditions Section -->
+                    <div class="md:col-span-2 bg-slate-800/60 p-4 rounded-xl border border-slate-700 mt-4">
+                        <h3 class="text-sm font-semibold text-slate-200 mb-4">الشروط والأحكام</h3>
+                        <div class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                            <p>• الأسعار المطروحة من قبل الشركة لتصليح الأعطال المتفق عليها مع العميل قابلة للتعديل بالنقص أو الزيادة حسب متطلبات السيارة وفي جميع الأحوال يتم إبلاغ العميل بزيادة الأسعار أو نقصانها ولا يتم العمل بالسيارة إلا بعد الحصول على موافقة كتابية من العميل أو إقرار صريح من العميل عن طريق وسائل التواصل الاجتماعي بالموافقة على تلك الزيادة.</p>
+                            <p>• نظرًا لعدم استقرار الأسعار فإن قطع الغيار التي يطلبها العميل من الشركة تحدد بموجب فاتورة شراء ويتم إبلاغ العميل بتلك الأسعار وفي حالة إضافة رسوم شراء أو رسوم تسويق من قبل الشركة يتم إبلاغ العميل بتلك الزيادة.</p>
+                            <p>• في حالة إذا طلب العميل أي قطع غير من الشركة فإن الشركة غير مسؤولة عن سلامتها من بعد التركيب ويتم تجربتها أمام العميل وفي جميع الأحوال لا يحق للعميل طلب استبدال قطع الغيار أو استرجاعها كما لا يحق للعميل أن يطلب ثمن أي قطع غيار سبق وأن طلبها من الشركة وفي جميع الأحوال فإن الشركة غير مسؤولة عن جودة قطع الغيار ولا تقوم الشركة بإعطاء فترة ضمان للعميل على أي قطع غيار تم تركيبها.</p>
+                            <p>• في حالة الاتفاق على تصليح السيارة فإن العميل يقوم بدفع مبلغ بمثابة عربون لبدء العمل بالتعليمات المحددة من قبل العميل ويعد هذا المبلغ بمثابة رسوم حجز ميعاد.</p>
+                            <p>• في حالة رغبة العميل في عدم إتمام الإصلاحات المتفق عليها يقوم باسترداد السيارة مع خصم مبلغ 200 جنيه من قيمة العربون المسدد وفي حالة إذا كان العربون مبلغ 200 جنيه فلا يحق للعميل المطالبة بمبلغ العربون المسدد حالًا أو مستقبلًا ويعتبر هذا المبلغ بمثابة رسوم حجز ميعاد.</p>
+                            <p class="font-semibold">• هذه المقايسة سارية لمدة أسبوع فقط من تاريخه ولا يعتد بها بعد مرور سبعة أيام.</p>
+                        </div>
+                    </div>
+
+                    <!-- Signature Section -->
+                    <div class="md:col-span-2 bg-gradient-to-br from-slate-800/80 to-slate-900/80 p-6 rounded-xl border border-slate-700 mt-4 shadow-lg">
+                        <h3 class="text-lg font-bold text-slate-100 mb-6 text-center">✍️ التوقيعات</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Officer Section -->
+                            <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-700/50">
+                                <div class="text-center mb-5">
+                                    <div class="text-sm font-bold text-amber-400 mb-3">📝 توقيع المسئول</div>
+                                    <div class="bg-gradient-to-b from-white to-slate-100 p-1 rounded-lg shadow-inner border-2 border-amber-500/30">
+                                        <canvas id="delegateCanvas" width="260" height="90" class="w-full border border-amber-300/50 rounded bg-white cursor-crosshair block"></canvas>
+                                    </div>
+                                    <div class="text-xs text-slate-400 mt-2">اضغط واسحب للتوقيع</div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-300 mb-1.5 block">👤 اسم المسئول</label>
+                                        <input id="delegateNameForSign" name="delegateNameForSign" placeholder="اكتب الاسم هنا" class="w-full p-2 rounded-lg text-sm bg-slate-950/50 border border-slate-600 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 transition" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Section -->
+                            <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-700/50">
+                                <div class="text-center mb-5">
+                                    <div class="text-sm font-bold text-emerald-400 mb-3">📝 توقيع العميل</div>
+                                    <div class="bg-gradient-to-b from-white to-slate-100 p-1 rounded-lg shadow-inner border-2 border-emerald-500/30">
+                                        <canvas id="customerCanvas" width="260" height="90" class="w-full border border-emerald-300/50 rounded bg-white cursor-crosshair block"></canvas>
+                                    </div>
+                                    <div class="text-xs text-slate-400 mt-2">اضغط واسحب للتوقيع</div>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-300 mb-1.5 block">👤 اسم العميل</label>
+                                        <input id="customerNameForSign" name="customerNameForSign" placeholder="اكتب الاسم هنا" class="w-full p-2 rounded-lg text-sm bg-slate-950/50 border border-slate-600 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-400 transition" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Store
+        const app = {
+            comparisons: [],
+            items: [],
+            descriptions: [],
+            prices: [],
+            delegateSignature: '',
+            customerSignature: '',
+            finalPrice: 0,
+            priceMap: {},
+            nextId: 1,
+            isDrawingDelegate: false,
+            isDrawingCustomer: false,
+            delegateCtx: null,
+            customerCtx: null,
+
+            // Configuration
+            itemOptions: ['رش وسمكرة', ' protection ', 'قطع غيار', 'أعمال زرجينا', 'أعمال عفشة', 'أعمال ماتور', 'أعمال كهرباء', ' spot repair'],
+            
+            descriptionOptions: ['اقصدام امامي', 'اقصدام خلفي', 'شاسيه امامي', 'شاسيه خلفي', 'رفرف خلفي يمين', 'رفرف خلفي شمال', 'رفرف امامي يمين', 'رفرف امامي شمال', 'باب خلفي يمين', 'باب خلفي شمال', 'باب أمامي يمين', 'باب أمامي شمال', 'قايم يمين', 'قايم شمال', 'عتبة يمين', 'عتبة شمال', 'سقف', 'كبوت', 'شنطة', 'حزام ماعدا سقف كبوت شنطة', 'سيارة بالكامل', 'غير محدد'],
+            
+            priceOptions: [
+                {
+                    category: 'رش وسمكرة',
+                    subOptions: [
+                        { label: 'dopair sr', price: '14000' },
+                        { label: 'maxmire sr', price: '16000' },
+                        { label: 'Sikkens sr', price: '12000' },
+                        { label: 'Spies Hecker sr', price: '20000' }
+                    ]
+                },
+                {
+                    category: 'Spot repair',
+                    subOptions: [
+                        { label: 'dopair s', price: '16000' },
+                        { label: 'maxmire s', price: '18000' },
+                        { label: 'Sikkens s', price: '14000' },
+                        { label: 'Spies Hecker s', price: '22000' }
+                    ]
+                },
+                {
+                    category: 'protection',
+                    subOptions: [
+                        { label: 'hixs', price: '120000 ' },
+                        { label: '3m', price: '75000' },
+                        { label: 'xpel', price: '85000' }
+                    ]
+                },
+                {
+                    category: 'حزام',
+                    subOptions: [
+                        { label: 'dopair h', price: '110000' },
+                        { label: 'maxmire h', price: '140000' },
+                        { label: 'Sikkens h', price: '90000' },
+                        { label: 'Spies Hecker h', price: '170000' }
+                    ]
+                },
+                {
+                    category: 'الكامل',
+                    subOptions: [
+                        { label: 'dopair k', price: '150000' },
+                        { label: 'maxmire k', price: '180000' },
+                        { label: 'Sikkens k', price: '120000' },
+                        { label: 'Spies Hecker k', price: '210000' }
+                    ]
+                },
+                {
+                    category: 'غير محدد',
+                    subOptions: [
+                        { label: 'حسب الفحص', price: 'يحدد لاحقاً' }
+                    ]
+                }
+            ],
+
+            init() {
+                this.setNow();
+                this.buildPriceMap();
+                this.renderItems();
+                this.renderDescriptions();
+                this.renderPrices();
+                this.initializeSignaturePads();
+                this.attachEventListeners();
+            },
+
+            setNow() {
+                const now = new Date();
+                const dayDisplay = document.getElementById('dayDisplay');
+                const dateDisplay = document.getElementById('dateDisplay');
+                const timeDisplay = document.getElementById('timeDisplay');
+                
+                try {
+                    const day = now.toLocaleDateString('ar-EG', { weekday: 'long' });
+                    dayDisplay.textContent = day;
+                } catch (e) {
+                    const day = now.toLocaleDateString(undefined, { weekday: 'long' });
+                    dayDisplay.textContent = day;
+                }
+                
+                const dateStr = now.toISOString().slice(0, 10);
+                const timeStr = now.toTimeString().slice(0, 5);
+                
+                dateDisplay.textContent = dateStr;
+                timeDisplay.textContent = timeStr;
+            },
+
+            buildPriceMap() {
+                this.priceMap = {};
+                for (const group of this.priceOptions) {
+                    for (const sub of group.subOptions) {
+                        const txt = String(sub.price || '');
+                        const m = txt.match(/(\d+[\d\,\.]*)/);
+                        if (m) {
+                            const num = Number(m[1].toString().replace(/,/g, ''));
+                            this.priceMap[sub.label] = Number.isFinite(num) ? num : null;
+                        } else {
+                            this.priceMap[sub.label] = null;
+                        }
+                    }
+                }
+            },
+
+            renderItems() {
+                const container = document.getElementById('itemsContainer');
+                container.innerHTML = '';
+                for (const opt of this.itemOptions) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = this.items.includes(opt)
+                        ? 'p-3 rounded-xl border-2 bg-blue-600 border-blue-500 hover:border-blue-400 transition text-sm font-medium flex items-center justify-center h-20 text-white'
+                        : 'p-3 rounded-xl border-2 bg-slate-950/50 border-slate-600 hover:border-blue-400 transition text-sm font-medium flex items-center justify-center h-20 text-slate-300';
+                    btn.textContent = opt;
+                    btn.onclick = () => this.toggleItem(opt);
+                    container.appendChild(btn);
+                }
+            },
+
+            renderDescriptions() {
+                const container = document.getElementById('descriptionsContainer');
+                container.innerHTML = '';
+                for (const opt of this.descriptionOptions) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = this.descriptions.includes(opt)
+                        ? 'p-3 rounded-xl border-2 bg-purple-600 border-purple-500 hover:border-purple-400 transition text-sm font-medium flex items-center justify-center h-20 text-white'
+                        : 'p-3 rounded-xl border-2 bg-slate-950/50 border-slate-600 hover:border-purple-400 transition text-sm font-medium flex items-center justify-center h-20 text-slate-300';
+                    btn.textContent = opt;
+                    btn.onclick = () => this.toggleDescription(opt);
+                    container.appendChild(btn);
+                }
+            },
+
+            renderPrices() {
+                const container = document.getElementById('pricesContainer');
+                container.innerHTML = '';
+                for (const priceGroup of this.priceOptions) {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'border-2 border-amber-600/50 rounded-xl p-4 bg-gradient-to-b from-slate-900/50 to-slate-950/70';
+                    
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'text-sm font-bold text-amber-300 mb-3 text-center';
+                    categoryDiv.textContent = priceGroup.category;
+                    groupDiv.appendChild(categoryDiv);
+                    
+                    const buttonsDiv = document.createElement('div');
+                    buttonsDiv.className = 'grid grid-cols-2 gap-2';
+                    
+                    for (const subOpt of priceGroup.subOptions) {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = this.prices.includes(subOpt.label)
+                            ? 'p-2 rounded-lg border-2 bg-amber-600 border-amber-500 hover:border-amber-400 transition text-xs font-medium flex flex-col items-center justify-center text-white'
+                            : 'p-2 rounded-lg border-2 bg-slate-950/50 border-slate-700 hover:border-amber-400 transition text-xs font-medium flex flex-col items-center justify-center text-slate-300';
+                        
+                        const label = document.createElement('span');
+                        label.textContent = subOpt.label;
+                        
+                        const price = document.createElement('span');
+                        price.className = this.prices.includes(subOpt.label)
+                            ? 'text-amber-200 text-xs mt-1'
+                            : 'text-slate-400 text-xs mt-1';
+                        price.textContent = subOpt.price;
+                        
+                        btn.appendChild(label);
+                        btn.appendChild(price);
+                        btn.onclick = () => this.togglePrice(subOpt.label);
+                        
+                        buttonsDiv.appendChild(btn);
+                    }
+                    
+                    groupDiv.appendChild(buttonsDiv);
+                    container.appendChild(groupDiv);
+                }
+            },
+
+            toggleItem(item) {
+                const index = this.items.indexOf(item);
+                if (index > -1) {
+                    this.items.splice(index, 1);
+                } else {
+                    this.items.push(item);
+                }
+                this.renderItems();
+                this.updateTotal();
+            },
+
+            toggleDescription(desc) {
+                const index = this.descriptions.indexOf(desc);
+                if (index > -1) {
+                    this.descriptions.splice(index, 1);
+                } else {
+                    this.descriptions.push(desc);
+                }
+                this.renderDescriptions();
+                this.updateTotal();
+            },
+
+            togglePrice(price) {
+                const index = this.prices.indexOf(price);
+                if (index > -1) {
+                    this.prices.splice(index, 1);
+                } else {
+                    this.prices.push(price);
+                }
+                this.renderPrices();
+                this.updateFinalPrice();
+                this.updateTotal();
+            },
+
+            updateTotal() {
+                const parts = [...this.items, ...this.descriptions, ...this.prices];
+                const totalDisplay = document.getElementById('totalDisplay');
+                if (parts.length > 0) {
+                    totalDisplay.textContent = parts.join(' - ');
+                } else {
+                    totalDisplay.textContent = '✨ اختر من الخيارات أعلاه';
+                }
+            },
+
+            updateFinalPrice() {
+                let sum = 0;
+                let hasNonNumeric = false;
+                for (const label of this.prices) {
+                    const v = this.priceMap[label];
+                    if (v == null) {
+                        hasNonNumeric = true;
+                    } else {
+                        sum += v;
+                    }
+                }
+                
+                const finalPriceInput = document.getElementById('finalPrice');
+                if (hasNonNumeric && sum === 0) {
+                    this.finalPrice = 'يحدد لاحقاً';
+                    finalPriceInput.value = 'يحدد لاحقاً';
+                } else if (hasNonNumeric) {
+                    this.finalPrice = `${sum} + يحدد لاحقاً`;
+                    finalPriceInput.value = `${sum} + يحدد لاحقاً`;
+                } else {
+                    this.finalPrice = sum;
+                    finalPriceInput.value = sum;
+                }
+            },
+
+            initializeSignaturePads() {
+                const delegateCanvas = document.getElementById('delegateCanvas');
+                const customerCanvas = document.getElementById('customerCanvas');
+
+                if (delegateCanvas) {
+                    this.delegateCtx = delegateCanvas.getContext('2d');
+                    this.setupCanvasEvents(delegateCanvas, this.delegateCtx, true);
+                }
+
+                if (customerCanvas) {
+                    this.customerCtx = customerCanvas.getContext('2d');
+                    this.setupCanvasEvents(customerCanvas, this.customerCtx, false);
+                }
+            },
+
+            setupCanvasEvents(canvas, ctx, isDelegate) {
+                if (!ctx) return;
+
+                canvas.addEventListener('mousedown', (e) => {
+                    if (isDelegate) {
+                        this.isDrawingDelegate = true;
+                    } else {
+                        this.isDrawingCustomer = true;
+                    }
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    const isDrawing = isDelegate ? this.isDrawingDelegate : this.isDrawingCustomer;
+                    if (!isDrawing) return;
+
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    ctx.lineWidth = 2;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.strokeStyle = '#000';
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                });
+
+                canvas.addEventListener('mouseup', () => {
+                    if (isDelegate) {
+                        this.isDrawingDelegate = false;
+                        this.delegateSignature = canvas.toDataURL();
+                    } else {
+                        this.isDrawingCustomer = false;
+                        this.customerSignature = canvas.toDataURL();
+                    }
+                });
+
+                canvas.addEventListener('mouseout', () => {
+                    if (isDelegate) {
+                        this.isDrawingDelegate = false;
+                    } else {
+                        this.isDrawingCustomer = false;
+                    }
+                });
+            },
+
+            attachEventListeners() {
+                const form = document.getElementById('comparisonForm');
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addComparison();
+                });
+            },
+
+            addComparison() {
+                const customer = document.getElementById('customer').value.trim();
+                const carModel = document.getElementById('carModel').value.trim();
+                const plate = document.getElementById('plate').value.trim();
+                
+                if (!customer || !carModel || !plate) {
+                    alert('الرجاء ملء الحقول المطلوبة');
+                    return;
+                }
+
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0, 10);
+                const timeStr = now.toTimeString().slice(0, 5);
+
+                const comparison = {
+                    id: this.nextId++,
+                    carModel: carModel,
+                    plate: plate,
+                    customer: customer,
+                    date: document.getElementById('receiptTime').value || dateStr,
+                    notes: document.getElementById('notes').value.trim() || undefined,
+                    createdDate: dateStr,
+                    createdTime: timeStr,
+                    receiptTime: document.getElementById('receiptTime').value || undefined,
+                    phone: document.getElementById('phone').value.trim() || undefined,
+                    carType: document.getElementById('carType').value.trim() || undefined,
+                    color: document.getElementById('color').value.trim() || undefined,
+                    vin: document.getElementById('vin').value.trim() || undefined,
+                    odometer: document.getElementById('odometer').value.trim() || undefined,
+                    delegateNameForSign: document.getElementById('delegateNameForSign').value.trim() || undefined,
+                    customerNameForSign: document.getElementById('customerNameForSign').value.trim() || undefined,
+                    delegateSignature: this.delegateSignature || undefined,
+                    customerSignature: this.customerSignature || undefined,
+                    items: [...this.items],
+                    descriptions: [...this.descriptions],
+                    prices: [...this.prices],
+                    finalPrice: this.finalPrice
+                };
+
+                this.comparisons.push(comparison);
+                
+                // Log the data (in a real app, this would be sent to a server)
+                console.log('Comparison added:', comparison);
+                alert('تم حفظ المقايسة بنجاح!');
+
+                // Reset form
+                this.resetForm();
+            },
+
+            resetForm() {
+                document.getElementById('comparisonForm').reset();
+                document.getElementById('finalPrice').value = '';
+                this.items = [];
+                this.descriptions = [];
+                this.prices = [];
+                this.delegateSignature = '';
+                this.customerSignature = '';
+                this.finalPrice = 0;
+                
+                this.renderItems();
+                this.renderDescriptions();
+                this.renderPrices();
+                this.updateTotal();
+                
+                // Clear canvas
+                if (this.delegateCtx && document.getElementById('delegateCanvas')) {
+                    const canvas = document.getElementById('delegateCanvas');
+                    this.delegateCtx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                if (this.customerCtx && document.getElementById('customerCanvas')) {
+                    const canvas = document.getElementById('customerCanvas');
+                    this.customerCtx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+        };
+
+        // Initialize the app when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>

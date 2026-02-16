@@ -81,12 +81,12 @@
         <form id="loginForm" method="POST" action="http://localhost:8000/login" enctype="application/x-www-form-urlencoded">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" id="username" required />
+                <input required type="text" name="username" id="username" required />
             </div>
 
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" id="password" required />
+                <input required type="password" name="password" id="password" required />
             </div>
 
             <button type="submit">Login</button>
@@ -101,7 +101,6 @@
             window.addEventListener("DOMContentLoaded", () => {
             const url = new URL(window.location);
             if (url.searchParams.has("error")) {
-                // Remove the error param from the URL without reloading
                 url.searchParams.delete("error");
                 window.history.replaceState({}, document.title, url.pathname);
             }
