@@ -1,137 +1,205 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<title>الموافقة علي الطلبات</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-    background-color: #0f172a;
-    color: #f1f5f9;
-    font-family: Arial, sans-serif;
-    margin: 0;
-}
-.container {
-    max-width: 1600px;
-    margin: auto;
-    padding: 20px;
-}
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-header a { color: #cbd5e1; text-decoration: none; }
-header a:hover { color: #fff; }
+    <meta charset="UTF-8">
+    <title>الاستلامات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
-.form-section, .table-section {
-    background-color: rgba(30,30,50,0.8);
-    border: 1px solid rgba(100,100,120,0.5);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-}
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
-    gap: 10px;
-}
-input, button {
-    padding: 6px 8px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(15,23,42,0.7);
-    color: #f1f5f9;
-}
-button {
-    cursor: pointer;
-    font-weight: bold;
-}
-button.add { background: linear-gradient(to left, #34d399, #14b8a6); color: #000; }
-button.delete { background-color: #04a32c; color: #000; }
+        .container {
+            max-width: 1600px;
+            margin: auto;
+            padding: 20px;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 6px;
-    border-bottom: 1px solid rgba(100,100,120,0.5);
-    text-align: right;
-}
-tr:hover { background-color: rgba(100,100,150,0.2); }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-.error { color: #f87171; margin-bottom: 10px; }
-.approve-btn { background: linear-gradient(to left,#60a5fa,#3b82f6); color:#fff; padding:6px 10px; border-radius:8px; border:none; }
-tr.approved { background-color: rgba(16,185,129,0.08); }
-</style>
+        header a {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+
+        header a:hover {
+            color: #fff;
+        }
+
+        .form-section,
+        .table-section {
+            background-color: rgba(30, 30, 50, 0.8);
+            border: 1px solid rgba(100, 100, 120, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        input,
+        button {
+            padding: 6px 8px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(15, 23, 42, 0.7);
+            color: #f1f5f9;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button.accept {
+            background: linear-gradient(to left, #34d399, #14b8a6);
+            color: #000;
+        }
+
+        button.delete {
+            background-color: #04a32c;
+            color: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 6px;
+            border-bottom: 1px solid rgba(100, 100, 120, 0.5);
+            text-align: right;
+        }
+
+        tr:hover {
+            background-color: rgba(100, 100, 150, 0.2);
+        }
+
+        .error {
+            color: #f87171;
+            margin-bottom: 10px;
+        }
+
+        .approve-btn {
+            background: linear-gradient(to left, #60a5fa, #3b82f6);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        tr.approved {
+            background-color: rgba(16, 185, 129, 0.08);
+        }
+    </style>
 </head>
+
 <body>
-<div class="form-section">
-<h2>بحث الفورم</h2>
-<div style="display:flex; gap:10px;">
-    <input id="searchInput" placeholder="ابحث بالموديل" style="width:50%;">
-    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف" style="width:50%;">
-</div>
-</div>
+    <div class="form-section">
+        <h2>بحث</h2>
+        <div style="display:flex; gap:10px;">
+            <input id="searchInput" placeholder="ابحث باسم الموطف" style="width:50%;">
+            <input id="phoneSearchInput" placeholder="ابحث برقم عاتف العميل" style="width:50%;">
+        </div>
+    </div>
 
-<div class="table-section">
-<h2>قائمة الاستلامات</h2>
-<table>
-<thead>
-<tr>
-    <th>ID</th>
-    <th>day</th>
-    <th>current_date</th>
-    <th>customer_name</th>
-    <th>receive_date</th>
-    <th>customer_phone_number</th>
-    <th>customer_email</th>
-    <th>brand</th>
-    <th>model</th>
-    <th>color</th>
-    <th>chassis_number</th>
-    <th>plate_number</th>
-    <th>mileage</th>
-    <th>category</th>
-    <th>fix_description</th>
-    <th>total_price</th>
-    <th>remains</th>
-    <th>total_paid</th>
-    <th>notes</th>
-    <th>employee_name</th>
-    <th>إجراءات</th>
-</tr>
-</thead>
-<tbody id="formTable"></tbody>
-</table>
-</div>
-</div>
-<script>
-const errorDiv = document.getElementById("error");
-let allform = [];
+    <div class="table-section">
+        <h2>تنتطر الموافقة</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>day</th>
+                    <th>current_date</th>
+                    <th>customer_name</th>
+                    <th>receive_date</th>
+                    <th>customer_phone_number</th>
+                    <th>customer_email</th>
+                    <th>brand</th>
+                    <th>model</th>
+                    <th>color</th>
+                    <th>chassis_number</th>
+                    <th>plate_number</th>
+                    <th>mileage</th>
+                    <th>category</th>
+                    <th>fix_description</th>
+                    <th>total_price</th>
+                    <th>remains</th>
+                    <th>total_paid</th>
+                    <th>notes</th>
+                    <th>employee_name</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="pendingTable"></tbody>
+        </table>
+    </div>
 
-async function loadforms() {
-    const tbody = document.getElementById("formTable");
-    tbody.innerHTML = "";
-    try {
-        const res = await fetch("http://localhost:8000/receiving/get_receive_forms", { credentials:"include" });
-        allform = await res.json();
-        renderForms(allform);
-    } catch (e) {
-        errorDiv.textContent = e.message;
-    }
-}
+    <div class="table-section">
+        <h2>قائمة الاستلامات</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>day</th>
+                    <th>current_date</th>
+                    <th>customer_name</th>
+                    <th>receive_date</th>
+                    <th>customer_phone_number</th>
+                    <th>customer_email</th>
+                    <th>brand</th>
+                    <th>model</th>
+                    <th>color</th>
+                    <th>chassis_number</th>
+                    <th>plate_number</th>
+                    <th>mileage</th>
+                    <th>category</th>
+                    <th>fix_description</th>
+                    <th>total_price</th>
+                    <th>remains</th>
+                    <th>total_paid</th>
+                    <th>notes</th>
+                    <th>employee_name</th>
+                </tr>
+            </thead>
+            <tbody id="approvedTable"></tbody>
+        </table>
+    </div>
 
-function renderForms(forms) {
-    const tbody = document.getElementById("formTable");
-    tbody.innerHTML = "";
+    <script>
+        let pending_forms = [];
 
-    forms.forEach(form => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+        async function loadPending() {
+            const tbody = document.getElementById("pendingTable");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/receiving/get_pending_forms", { credentials: "include" });
+            pending_forms = await res.json();
+            renderPending(pending_forms);
+        }
+
+        function renderPending(forms) {
+            const tbody = document.getElementById("pendingTable");
+            tbody.innerHTML = "";
+
+            forms.forEach(form => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td>${form.id}</td>
             <td>${form.day}</td>
             <td>${form.current_date || "-"}</td>
@@ -156,37 +224,80 @@ function renderForms(forms) {
                 <button class="delete" onclick="accept(${form.id})">موافقة</button>
             </td>
         `;
-        tbody.appendChild(tr);
-    });
-}
+                tbody.appendChild(tr);
+            });
+        }
 
 
-function applySearch() {
-    const modelQuery = document.getElementById("searchInput").value.toLowerCase();
-    const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
+        function applySearch() {
+            const modelQuery = document.getElementById("searchInput").value.toLowerCase();
+            const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
 
-    renderCars(
-        allCars.filter(c =>
-            c.model.toLowerCase().includes(modelQuery) &&
-            (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
-        )
-    );
-}
-async function accept(id) {
-    try {
-        const res = await fetch(`http://localhost:8000/receiving/approve_form/${id}`, {
-            method: "PATCH",
-            credentials: "include"
-        });
-        loadforms();
-    } catch (e) {
-        errorDiv.textContent = e.message;
-    }
-}
+            renderCars(
+                allCars.filter(c =>
+                    c.model.toLowerCase().includes(modelQuery) &&
+                    (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
+        async function accept(id) {
+            const res = await fetch(`http://localhost:8000/receiving/approve_form/${id}`, {
+                method: "PATCH",
+                credentials: "include"
+            });
+            loadPending();
+            loadApproved();
+        }
 
-document.getElementById("searchInput").addEventListener("input", applySearch);
-document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
+        document.getElementById("searchInput").addEventListener("input", applySearch);
+        document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
 
-loadforms();
-</script>
+        loadPending();
+
+        let approved = [];
+
+        async function loadApproved() {
+            const tbody = document.getElementById("approvedTable");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/receiving/get_approved_forms", { credentials: "include" });
+            approved = await res.json();
+            renderApproved(approved);
+        }
+
+        function renderApproved(forms) {
+            const tbody = document.getElementById("approvedTable");
+            tbody.innerHTML = "";
+
+            forms.forEach(form => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${form.id}</td>
+            <td>${form.day}</td>
+            <td>${form.current_date || "-"}</td>
+            <td>${form.customer_name || "-"}</td>
+            <td>${form.receive_date || "-"}</td>
+            <td>${form.customer_phone_number || "-"}</td>
+            <td>${form.customer_email || "-"}</td>
+            <td>${form.brand || "-"}</td>
+            <td>${form.model || "-"}</td>
+            <td>${form.color || "-"}</td>
+            <td>${form.chassis_number || "-"}</td>
+            <td>${form.plate_number || "-"}</td>
+            <td>${form.mileage || "-"}</td>
+            <td>${form.category || "-"}</td>
+            <td>${form.fix_description || "-"}</td>
+            <td>${form.total_price || "-"}</td>
+            <td>${form.remains || "-"}</td>
+            <td>${form.total_paid || "-"}</td>
+            <td>${form.notes || "-"}</td>
+            <td>${form.employee_name || "-"}</td>
+            <td>
+                <button onclick="window.open('${form.pdf_url}', '_blank')">pdf</button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
+        loadApproved();
+    </script>
 </body>

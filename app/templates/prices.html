@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>إدارة السيارات</title>
+<title>Prices</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -80,7 +80,7 @@ tr:hover {
 <div class="container">
 
 <header>
-    <h1>إدارة الأسعار</h1>
+    <h1>الأسعار</h1>
 </header>
 
 <div class="error" id="error"></div>
@@ -292,8 +292,7 @@ document.getElementById("addPriceForm").addEventListener("submit", async e => {
             body: formData,
             credentials: "include"
         });
-        if (!res.ok) throw new Error("فشل الإضافة");
-        errorDiv.textContent = "تمت الإضافة بنجاح";
+        if (!res.ok) errorDiv.textContent = "فشل الإضافة";
         e.target.reset();
         loadPrices();
     } catch (e) {
@@ -311,8 +310,7 @@ document.getElementById("addDescriptionForm").addEventListener("submit", async e
             body: formData,
             credentials: "include"
         });
-        if (!res.ok) throw new Error("فشل الإضافة");
-        errorDiv.textContent = "تمت الإضافة بنجاح";
+        if (!res.ok) errorDiv.textContent = "فشل الإضافة";
         e.target.reset();
         loadDescriptions();
     } catch (e) {

@@ -1,270 +1,392 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>صفحة مركز الاتصالات</title>
+    <title>خدمة العملاء</title>
     <style>
-body {
-    background-color: #000000;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    font-size: 16px;
-}
-.container {
-    max-width: 1600px;
-    margin: auto;
-    padding: 20px;
-}
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-header a { color: #ffffff; text-decoration: none; }
-header a:hover { color: #fff; }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            font-size: 16px;
+        }
 
-.form-section, .table-section {
-    background-color: #000000;
-    border: 2px solid rgba(0, 0, 0, 0.6);
-    border-radius: 16px;
-    padding: 25px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-}
-.form-section h2, .table-section h2 {
-    font-size: 22px;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
-    gap: 10px;
-}
-input {
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: none;
-    background: #444444;
-    color: #ffffff;
-    font-size: 15px;
-}
-button {
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    background-color: #888888 !important;
-    color: #000 !important;
-    font-size: 14px;
-}
-button.add { background-color: #888888 !important; color: #000 !important; }
-button.delete { background-color: #888888 !important; color: #000 !important; }
+        .container {
+            max-width: 1600px;
+            margin: auto;
+            padding: 20px;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid rgba(100,100,120,0.5);
-    text-align: right;
-    font-size: 14px;
-}
-tr:hover { background-color: rgba(100,100,150,0.2); }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-.error { color: #f87171; margin-bottom: 10px; }
-</style>
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        header a:hover {
+            color: #fff;
+        }
+
+        .form-section,
+        .table-section {
+            background-color: #000000;
+            border: 2px solid rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .form-section h2,
+        .table-section h2 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            background: #444444;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #888888 !important;
+            color: #000 !important;
+            font-size: 14px;
+        }
+
+        button.add {
+            background-color: #888888 !important;
+            color: #000 !important;
+        }
+
+        button.delete {
+            background-color: #888888 !important;
+            color: #000 !important;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(100, 100, 120, 0.5);
+            text-align: right;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: rgba(100, 100, 150, 0.2);
+        }
+
+        .error {
+            color: #f87171;
+            margin-bottom: 10px;
+        }
+
+        .top-left-btn {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 1000;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background-color: #888888;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .top-left-btn:hover {
+            background-color: #aaaaaa;
+        }
+    </style>
 </head>
+
 <body class="bg-black">
     <div class="bg-black px-4 py-8 text-center">
         <h1 class="text-gray-400 text-4xl font-bold">Call Center</h1>
     </div>
+    <a href="http://localhost:8000/booking" class="top-left-btn">
+        حجز موعد
+    </a>
     <div>
         <div class="w-full max-w-2xl">
             <div class="grid grid-cols-3 gap-6">
             </div>
         </div>
         <div class="form-section">
-<h2>بحث العملاء الحاليين</h2>
-<div>
-    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
-</div>
-</div>
+            <div>
+                <input id="currentPhoneSearchInput" placeholder="ابحث برقم الهاتف">
+            </div>
+        </div>
 
-<div class="table-section">
-<h2>قائمة العملاء الحاليين</h2>
-<table>
-<thead>
-<tr>
-    <th>id</th>
-    <th>اسم العميل</th>
-    <th>رقم الهاتف</th>
-    <th>نوع السيارة</th>
-    <th>الموديل</th>
-    <th>رقم الشاسيه</th>
-    <th>اللون</th>
-    <th>رقم اللوحة المعدنية</th>
-    <th>العداد</th>
-    <th>تاريخ التسليم</th>
-</tr>
-</thead>
-<tbody id="call_center"></tbody>
-</table>
-</div>
-</div>
+        <div class="table-section">
+            <h2>قائمة العملاء الحاليين</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>اسم العميل</th>
+                        <th>رقم الهاتف</th>
+                        <th>نوع السيارة</th>
+                        <th>الموديل</th>
+                        <th>اللون</th>
+                        <th>العداد</th>
+                        <th>رقم اللوحة المعدنية</th>
+                    </tr>
+                </thead>
+                <tbody id="call_center"></tbody>
+            </table>
+        </div>
     </div>
 
-    <body> 
-    <div>
-    </div>
     <div>
         <div class="w-full max-w-2xl">
             <div class="grid grid-cols-3 gap-6">
             </div>
         </div>
         <div class="form-section">
-<h2>بحث العملاء المستقبليين</h2>
-<div>
-    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
-</div>
-</div>
+            <div>
+                <input id="futurePhoneSearchInput" placeholder="ابحث برقم الهاتف">
+            </div>
+        </div>
 
-<div class="table-section">
-<h2>قائمة العملاء المستقبليين</h2>
-<table>
-<thead>
-<tr>
-    <th>id</th>
-    <th>اسم العميل</th>
-    <th>رقم الهاتف</th>
-    
-</tr>
-</thead>
-<tbody id="future_customers"></tbody>
-</table>
-</div>
-</div>
+        <div class="table-section">
+            <h2>قائمة العملاء المستقبليين</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>اسم العميل</th>
+                        <th>رقم الهاتف</th>
+
+                    </tr>
+                </thead>
+                <tbody id="future_customers"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <div class="w-full max-w-2xl">
+            <div class="grid grid-cols-3 gap-6">
+            </div>
+        </div>
+        <div class="form-section">
+            <div>
+                <input id="bookingsPhoneSearch" placeholder="ابحث برقم الهاتف">
+            </div>
+        </div>
+
+        <div class="table-section">
+            <h2>الحجوزات</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>اليوم</th>
+                        <th>اسم العميل</th>
+                        <th>تاريخ التسليم</th>
+                        <th>رقم هاتف العميل</th>
+                        <th>البريد الالكترني</th>
+                        <th>البراند</th>
+                        <th>الموديل</th>
+                        <th>اللون</th>
+                        <th>رقم الشاسية</th>
+                        <th>اللوحات المعدنية</th>
+                        <th>العداد</th>
+                        <th>البند</th>
+                        <th>الوصف</th>
+                        <th>السعر</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
 
-        // customers
+        let all_customer = [];
 
-const errorDiv = document.getElementById("error");
-let all_customer = [];
+        async function loadcustomers() {
+            const tbody = document.getElementById("call_center");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/customers/get_current_customers", { credentials: "include" });
+            all_customer = await res.json();
+            render_customer(all_customer);
+        }
 
-async function loadcustomers() {
-    const tbody = document.getElementById("call_center");
-    tbody.innerHTML = "";
-    try {
-        const res = await fetch("http://localhost:8000/cars/get_cars", { credentials:"include" });
-        all_customer = await res.json();
-        render_customer(all_customer);
-    } catch (e) {
-        errorDiv.textContent = e.message;
-    }
-}
+        function render_customer(customers) {
+            const tbody = document.getElementById("call_center");
+            tbody.innerHTML = "";
 
-function render_customer(customers) {
-    const tbody = document.getElementById("call_center");
-    tbody.innerHTML = "";
-
-    customers.forEach(customer => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+            customers.forEach(customer => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td>${customer.id}</td>
-            <td>${customer.model}</td>
+            <td>${customer.name || "-"}</td>
+            <td>${customer.phone_number || "-"}</td>
             <td>${customer.brand}</td>
-            <td>${customer.year || "-"}</td>
-            <td>${customer.customer_name || "-"}</td>
-            <td>${customer.customer_phone_number || "-"}</td>
+            <td>${customer.model}</td>
             <td>${customer.color || "-"}</td>
             <td>${customer.mileage || "-"}</td>
             <td>${customer.plate_number || "-"}</td>
             <td>
-                <button onclick="toggleEdit(${customer.id})">تعديل</button>
             </td>
         `;
-        tbody.appendChild(tr);
+                tbody.appendChild(tr);
 
-    });
-}
+            });
+        }
 
-function applySearch() {
-    const modelQuery = document.getElementById("searchInput").value.toLowerCase();
-    const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
+        function applySearch() {
+            const phoneQuery = document.getElementById("currentPhoneSearchInput").value.toLowerCase();
 
-    render_customer(
-        all_customer.filter(c =>
-            c.model.toLowerCase().includes(modelQuery) &&
-            (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
-        )
-    );
-}
+            render_customer(
+                all_customer.filter(c =>
+                    (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
 
-document.getElementById("searchInput").addEventListener("input", applySearch);
-document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
-loadcustomers();
+        document.getElementById("currentPhoneSearchInput").addEventListener("input", applySearch);
+        loadcustomers();
 
+        let future_customers = [];
 
-// future_customers
+        async function load_future_customers() {
+            const tbody = document.getElementById("future_customers");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/customers/get_future_customers", { credentials: "include" });
+            future_customers = await res.json();
+            render_future_customers(future_customers);
+        }
 
-let future_customers = [];
+        function render_future_customers(customers) {
+            const tbody = document.getElementById("future_customers");
+            tbody.innerHTML = "";
 
-async function load_future_customers() {
-    const tbody = document.getElementById("future_customers");
-    tbody.innerHTML = "";
-    try {
-        const res = await fetch("http://localhost:8000/cars/get_cars", { credentials:"include" });
-        future_customers = await res.json();
-        render_future_customers(future_customers);
-    } catch (e) {
-        errorDiv.textContent = e.message;
-    }
-}
-
-function render_future_customers(customers) {
-    const tbody = document.getElementById("future_customers");
-    tbody.innerHTML = "";
-
-    customers.forEach(customer => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+            customers.forEach(customer => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td>${customer.id}</td>
-            <td>${customer.customer_name || "-"}</td>
-            <td>${customer.customer_phone_number || "-"}</td>
+            <td>${customer.name || "-"}</td>
+            <td>${customer.phone_number || "-"}</td>
             <td>
                 <button onclick="toggleEdit(${customer.id})">تعديل</button>
             </td>
         `;
-        tbody.appendChild(tr);
+                tbody.appendChild(tr);
 
-    });
-}
+            });
+        }
 
-function applySearch() {
-    const modelQuery = document.getElementById("searchInput").value.toLowerCase();
-    const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
+        function applySearch() {
+            const phoneQuery = document.getElementById("futurePhoneSearchInput").value.toLowerCase();
 
-    render_customer(
-        all_customer.filter(c =>
-            c.model.toLowerCase().includes(modelQuery) &&
-            (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
-        )
-    );
-}
+            render_future_customers(
+                future_customers.filter(c =>
+                    c.customer_phone_number.toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
+        document.getElementById("futurePhoneSearchInput").addEventListener("input", applySearch);
+        load_future_customers();
 
-document.getElementById("searchInput").addEventListener("input", applySearch);
-document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
-load_future_customers();
+        // bookings
 
+        let bookings = [];
+
+        async function load_bookings() {
+            const tbody = document.getElementById("bookings");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/booking/get_bookings", { credentials: "include" });
+            bookings = await res.json();
+            render_bookings(bookings);
+        }
+
+        function render_bookings(bookings) {
+            const tbody = document.getElementById("bookings");
+            tbody.innerHTML = "";
+
+            bookings.forEach(booking => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${booking.id}</td>
+            <td>${booking.day || "-"}</td>
+            <td>${booking.customer_name || "-"}</td>
+            <td>${booking.receive_date || "-"}</td>
+            <td>${booking.customer_phone_number || "-"}</td>
+            <td>${booking.customer_email || "-"}</td>
+            <td>${booking.brand || "-"}</td>
+            <td>${booking.model || "-"}</td>
+            <td>${booking.color || "-"}</td>
+            <td>${booking.chassis_number || "-"}</td>
+            <td>${booking.plate_number || "-"}</td>
+            <td>${booking.mileage || "-"}</td>
+            <td>${booking.category || "-"}</td>
+            <td>${booking.fix_description || "-"}</td>
+            <td>${booking.total_price || "-"}</td>
+            <td>
+                <button onclick="window.open('${booking.pdf_url}', '_blank')">pdf</button>
+                <button onclick="deleteBooking(${booking.id})">حذف</button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function deleteBooking(id) {
+            if (!confirm("هل أنت متأكد؟")) return;
+            const res = await fetch(`http://localhost:8000/booking/delete_booking/${id}`, {
+                method: "DELETE",
+                credentials: "include"
+            });
+            if (!res.ok) throw new Error("فشل الحذف");
+            load_bookings();
+        }
+
+        function applySearch() {
+            const phoneQuery = document.getElementById("bookingsPhoneSearch").value.toLowerCase();
+
+            render_bookings(
+                bookings.filter(c =>
+                    c.customer_phone_number.toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
+        document.getElementById("bookingsPhoneSearch").addEventListener("input", applySearch);
+        load_bookings();
     </script>
-    
-</body>

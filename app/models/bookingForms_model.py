@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String, Date, Boolean, Numeric
+from sqlalchemy import Column, Integer, String, Date, Numeric
 from database import Base
 
-class ReceivingForm(Base):
-    __tablename__ = "receiving_forms"
+class BookingForm(Base):
+    __tablename__ = "booking_forms"
 
     id = Column(Integer, primary_key=True, nullable=False, index=True)
     day = Column(String, nullable=False)
@@ -20,9 +20,4 @@ class ReceivingForm(Base):
     category = Column(String, nullable=False)
     fix_description = Column(String, nullable=False)
     total_price = Column(String, nullable=False)
-    remains = Column(Numeric(12, 2), nullable=True)
-    total_paid = Column(Numeric(12, 2), nullable=False)
-    notes = Column(String, nullable=True)
-    employee_name = Column(String, nullable=False)
-    approved = Column(Boolean, nullable=False)
     pdf_url = Column(String, nullable=True)

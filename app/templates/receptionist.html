@@ -108,7 +108,9 @@ tr:hover { background-color: rgba(100,100,150,0.2); }
     <th>id</th>
     <th>اسم العميل</th>
     <th>رقم الهاتف</th>
-    
+    <th>Was called</th>
+    <th>اجراء</th>
+    <th></th>
 </tr>
 </thead>
 <tbody id="future_customers"></tbody>
@@ -126,13 +128,9 @@ let future_customers = [];
 async function load_future_customers() {
     const tbody = document.getElementById("future_customers");
     tbody.innerHTML = "";
-    try {
-        const res = await fetch("http://localhost:8000/cars/get_cars", { credentials:"include" });
-        future_customers = await res.json();
-        render_future_customers(future_customers);
-    } catch (e) {
-        errorDiv.textContent = e.message;
-    }
+    const res = await fetch("http://localhost:8000/customers/get_future_customers", { credentials:"include" });
+    future_customers = await res.json();
+    render_future_customers(future_customers);
 }
 
 function render_future_customers(customers) {
@@ -145,14 +143,24 @@ function render_future_customers(customers) {
             <td>${customer.id}</td>
             <td>${customer.customer_name || "-"}</td>
             <td>${customer.customer_phone_number || "-"}</td>
+            <td>${customer.was_called || "-"}</td>
             <td>
-                <button onclick="toggleEdit(${customer.id})">تعديل</button>
+                <button onclick="customerCalled(${customer.id})">تم</button>
             </td>
         `;
         tbody.appendChild(tr);
 
     });
 }
+
+async function customerCalled(id) {
+    const res = await fetch(`http://localhost:8000/customers/future_customer_called/${id}`, {
+        method: "PATCH",
+        credentials: "include"
+    });
+    load_future_customers();
+}
+
 
 function applySearch() {
     const modelQuery = document.getElementById("searchInput").value.toLowerCase();
