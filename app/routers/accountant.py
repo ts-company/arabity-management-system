@@ -14,4 +14,4 @@ def get_admin_page(request: Request):
     if payload["role"] !=  "accountant":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    return templates.TemplateResponse("reports.html", {"request": request})
+    return templates.TemplateResponse("accountant.html", {"request": request})

@@ -303,7 +303,7 @@ tr.approved {
             loadApproved();
         }
 
-        function applySearch() {
+        function pending_applySearch() {
             const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
 
             renderPending(
@@ -313,10 +313,10 @@ tr.approved {
             );
         }
 
-        document.getElementById("pendingPhoneSearchInput").addEventListener("input", applySearch);
+        document.getElementById("phoneSearchInput").addEventListener("input", pending_applySearch);
 
 
-        function applySearch() {
+        function approved_applySearch() {
             const phoneQuery = document.getElementById("approvedPhoneSearchInput").value.toLowerCase();
 
             renderApproved(
@@ -326,6 +326,6 @@ tr.approved {
             );
         }
 
-        document.getElementById("approvedPhoneSearchInput").addEventListener("input", applySearch);
+        document.getElementById("approvedPhoneSearchInput").addEventListener("input", approved_applySearch);
     </script>
 </body>

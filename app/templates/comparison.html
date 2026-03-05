@@ -169,13 +169,20 @@
 
         function setLocalDayAndDate() {
             const now = new Date();
+
+            // fix timezone offset to get local date
+            const offset = now.getTimezoneOffset() * 60000; // in ms
+            const localNow = new Date(now.getTime() - offset);
+            const localISO = localNow.toISOString().slice(0, 10); // "YYYY-MM-DD"
+
             const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
             const dayEl = document.getElementById('day');
             const dateEl = document.getElementById('date');
-            if (dayEl) dayEl.value = dayNames[now.getDay()];
-            if (dateEl) dateEl.value = now.toISOString().slice(0, 10);
 
-            // when user changes the date manually, update the day name accordingly
+            if (dayEl) dayEl.value = dayNames[now.getDay()]; // day name for current local date
+            if (dateEl) dateEl.value = localISO;
+
+            // Update day name if user manually changes the date
             if (dateEl) {
                 dateEl.addEventListener('change', () => {
                     const d = new Date(dateEl.value);
@@ -187,6 +194,7 @@
         }
 
         setLocalDayAndDate();
+
 
         document.getElementById("receiveForm").addEventListener("submit", async (e) => {
             e.preventDefault();
