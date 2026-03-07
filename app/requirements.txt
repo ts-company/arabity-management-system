@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+reportlab
+pdfrw
+arabic-reshaper
+python-bidi
+bcrypt
+python-jose
+requests
+jinja2
