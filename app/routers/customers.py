@@ -126,7 +126,7 @@ def get_current_customers(request: Request,
             "color": c.color,
             "mileage": c.mileage,
             "plate_number": c.plate_number,
-            "source": "receiving"
+            "source": "استلام"
         })
 
     for c in booking:
@@ -139,7 +139,7 @@ def get_current_customers(request: Request,
             "color": c.color,
             "mileage": c.mileage,
             "plate_number": c.plate_number,
-            "source": "booking"
+            "source": "حجز"
         })
 
     for c in comparison:
@@ -152,7 +152,7 @@ def get_current_customers(request: Request,
             "color": c.color,
             "mileage": c.mileage,
             "plate_number": c.plate_number,
-            "source": "comparison"
+            "source": "مقايسة"
         })
 
     for c in delivery:
@@ -165,7 +165,7 @@ def get_current_customers(request: Request,
             "color": c.color,
             "mileage": c.mileage,
             "plate_number": c.plate_number,
-            "source": "delivery"
+            "source": "تسليم"
         })
 
     return customers
