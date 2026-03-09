@@ -227,7 +227,6 @@
             if (dayEl) dayEl.value = dayNames[now.getDay()]; // day name for current local date
             if (dateEl) dateEl.value = localISO;
 
-            // Update day name if user manually changes the date
             if (dateEl) {
                 dateEl.addEventListener('change', () => {
                     const d = new Date(dateEl.value);
