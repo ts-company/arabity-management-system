@@ -112,9 +112,24 @@
 
         <!-- Receiving Table -->
         <div class="table-section">
-            <h2>الاتسلامات</h2>
+            <h2>الاستلامات</h2>
             <div class="totals">المجموع: <span id="total-receive">0</span></div>
             <table id="table-receive">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>المبلغ</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- booking Table -->
+        <div class="table-section">
+            <h2>حجز الميعاد</h2>
+            <div class="totals">المجموع: <span id="total-booking">0</span></div>
+            <table id="table-booking">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -145,9 +160,11 @@
     <script>
         const tableReceive = document.querySelector("#table-receive tbody");
         const tableComparison = document.querySelector("#table-comparison tbody");
+        const tableBooking = document.querySelector("#table-booking tbody");
 
         const totalReceiveEl = document.getElementById("total-receive");
         const totalComparisonEl = document.getElementById("total-comparison");
+        const totalBookingEl = document.getElementById("total-booking");
 
         const btnDaily = document.getElementById("btn-daily");
         const btnMonthly = document.getElementById("btn-monthly");
@@ -170,6 +187,7 @@
                 // Clear old table rows
                 tableReceive.innerHTML = "";
                 tableComparison.innerHTML = "";
+                tableComparison.innerHTML = "";
                 // Receiving
                 data.receive.rows.forEach((price, i) => {
                     const tr = document.createElement("tr");
@@ -185,6 +203,13 @@
                     tableComparison.appendChild(tr);
                 });
                 totalComparisonEl.textContent = data.comparison.total;
+                // booking
+                data.booking.rows.forEach((price, i) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tableBooking.appendChild(tr);
+                });
+                totalBookingEl.textContent = data.booking.total;
 
             } catch (e) {
                 console.error(e);
@@ -227,6 +252,7 @@
 <a id="topLeftBtn"
     class="fixed top-6 right-6 px-10 py-2 rounded-xl bg-slate-800 text-white hover:bg-slate-700 transition z-50"
     href="http://localhost:8000/reports/parts">
-   قطع الغيار
+    قطع الغيار
 </a>
+
 </html>

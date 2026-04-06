@@ -1,6 +1,7 @@
 from sqlalchemy import delete
-from app.models.employees_model import Employee
-from app.database import  SessionLocal
+from models.employees_model import Employee
+from database import  SessionLocal
+from models.receivingForms_model import ReceivingForm
 
 session = SessionLocal()
 

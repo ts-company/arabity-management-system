@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>حجز الميعاد</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+body {
+    background-color: #000000;
+    color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    max-width: 1600px;
+    margin: auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+header a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: #ffffff;
+}
+
+/* Sections */
+.form-section,
+.table-section {
+    background-color: #000000;
+    border: 1px solid #333333;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+/* Inputs */
+input {
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    background: #000000;
+    color: #ffffff;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Buttons */
+button,
+button.accept,
+button.delete,
+.approve-btn {
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    background-color: #444444;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover,
+.approve-btn:hover {
+    background-color: #555555;
+}
+
+/* Tables with gold left accent line */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #000000;
+    position: relative;
+}
+
+/* Gold accent line on the left */
+table::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px; /* thickness of the gold line */
+    height: 100%;
+    background-color: gold;
+    border-radius: 2px;
+}
+
+/* Cells */
+th, td {
+    padding: 6px;
+    text-align: right;
+    border: none; /* no row separators */
+}
+
+/* Row hover */
+tr:hover {
+    background-color: #2a2a2a;
+}
+
+.error {
+    color: #ff6b6b;
+    margin-bottom: 10px;
+}
+
+/* Approved rows subtle gold */
+tr.approved {
+    background-color: rgba(255,215,0,0.08);
+}
+    </style>
+</head>
+
+<body>
+    <div class="form-section">
+        <h2>بحث</h2>
+        <div style="display:flex; gap:10px;">
+            <input id="pendingPhoneSearchInput" placeholder="ابحث برقم عاتف العميل" style="width:30%;">
+        </div>
+    </div>
+
+    <div class="table-section">
+        <h2>تنتطر الموافقة</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                    <th>اسم العميل</th>
+                    <th>تاريخ الاستلام</th>
+                    <th>رقم الهاتف</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>العلامة التجارية</th>
+                    <th>الموديل</th>
+                    <th>اللون</th>
+                    <th>رقم الشاسيه</th>
+                    <th>رقم اللوحة المعدنية</th>
+                    <th>العداد</th>
+                    <th>السعر</th>
+                    <th>اسم الموطف</th>
+                </tr>
+            </thead>
+            <tbody id="pendingTable"></tbody>
+        </table>
+    </div>
+
+    <div class="form-section">
+        <h2>بحث</h2>
+        <div style="display:flex; gap:10px;">
+            <input id="approvedPhoneSearchInput" placeholder="ابحث برقم عاتف العميل" style="width:30%;">
+        </div>
+    </div>
+
+    <div class="table-section">
+        <h2>قائمة المواعيد</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>اليوم</th>
+                    <th>التاريخ</th>
+                    <th>اسم العميل</th>
+                    <th>تاريخ الاستلام</th>
+                    <th>رقم الهاتف</th>
+                    <th>البريد الإلكتروني</th>
+                    <th>العلامة التجارية</th>
+                    <th>الموديل</th>
+                    <th>اللون</th>
+                    <th>رقم الشاسيه</th>
+                    <th>رقم اللوحة المعدنية</th>
+                    <th>العداد</th>
+                    <th>السعر</th>
+                    <th>اسم الموطف</th>
+                </tr>
+            </thead>
+            <tbody id="approvedTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let pending_forms = [];
+
+        async function loadPending() {
+            const tbody = document.getElementById("pendingTable");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/booking/get_pending_forms", { credentials: "include" });
+            pending_forms = await res.json();
+            renderPending(pending_forms);
+        }
+
+        function renderPending(forms) {
+            const tbody = document.getElementById("pendingTable");
+            tbody.innerHTML = "";
+
+            forms.forEach(form => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${form.id}</td>
+            <td>${form.day}</td>
+            <td>${form.current_date || "-"}</td>
+            <td>${form.customer_name || "-"}</td>
+            <td>${form.receive_date || "-"}</td>
+            <td>${form.customer_phone_number || "-"}</td>
+            <td>${form.customer_email || "-"}</td>
+            <td>${form.brand || "-"}</td>
+            <td>${form.model || "-"}</td>
+            <td>${form.color || "-"}</td>
+            <td>${form.chassis_number || "-"}</td>
+            <td>${form.plate_number || "-"}</td>
+            <td>${form.mileage || "-"}</td>
+            <td>${form.price || "-"}</td>
+            <td>${form.employee_name || "-"}</td>
+            <td>
+                <button class="delete" onclick="accept(${form.id})">موافقة</button>
+            </td>
+            <td>
+                <button class="delete" onclick="deleteForm(${form.id})">حذف</button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function accept(id) {
+            const res = await fetch(`http://localhost:8000/booking/approve_form/${id}`, {
+                method: "PATCH",
+                credentials: "include"
+            });
+            loadPending();
+            loadApproved();
+        }
+
+        loadPending();
+
+        let approved = [];
+
+        async function loadApproved() {
+            const tbody = document.getElementById("approvedTable");
+            tbody.innerHTML = "";
+            const res = await fetch("http://localhost:8000/booking/get_approved_forms", { credentials: "include" });
+            approved = await res.json();
+            renderApproved(approved);
+        }
+
+        function renderApproved(forms) {
+            const tbody = document.getElementById("approvedTable");
+            tbody.innerHTML = "";
+
+            forms.forEach(form => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${form.id}</td>
+            <td>${form.day}</td>
+            <td>${form.current_date || "-"}</td>
+            <td>${form.customer_name || "-"}</td>
+            <td>${form.receive_date || "-"}</td>
+            <td>${form.customer_phone_number || "-"}</td>
+            <td>${form.customer_email || "-"}</td>
+            <td>${form.brand || "-"}</td>
+            <td>${form.model || "-"}</td>
+            <td>${form.color || "-"}</td>
+            <td>${form.chassis_number || "-"}</td>
+            <td>${form.plate_number || "-"}</td>
+            <td>${form.mileage || "-"}</td>
+            <td>${form.price || "-"}</td>
+            <td>${form.employee_name || "-"}</td>
+            <td>
+                <button onclick="window.open('${form.pdf_url}', '_blank')">pdf</button>
+                <button onclick="deleteForm(${form.id})">حذف</button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
+        loadApproved();
+
+        async function deleteForm(id) {
+            if (!confirm("هل أنت متأكد؟")) return;
+            const res = await fetch(`http://localhost:8000/booking/delete_form/${id}`, {
+                method: "DELETE",
+                credentials: "include"
+            });
+            if (!res.ok) {
+                alert("فشل الحذف");
+                return;
+            }
+            loadApproved();
+        }
+        function pending_applySearch() {
+            const phoneQuery = document.getElementById("pendingPhoneSearchInput").value.toLowerCase();
+
+            renderPending(
+                pending_forms.filter(c =>
+                    (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
+
+        document.getElementById("pendingPhoneSearchInput").addEventListener("input", pending_applySearch);
+
+
+        function approved_applySearch() {
+            const phoneQuery = document.getElementById("approvedPhoneSearchInput").value.toLowerCase();
+
+            renderApproved(
+                approved.filter(c =>
+                    (c.customer_phone_number || "").toLowerCase().includes(phoneQuery)
+                )
+            );
+        }
+
+        document.getElementById("approvedPhoneSearchInput").addEventListener("input", approved_applySearch);
+    </script>
+</body>

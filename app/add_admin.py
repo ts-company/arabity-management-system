@@ -2,13 +2,14 @@ from sqlalchemy import select
 from database import SessionLocal
 from models.employees_model import  Employee
 from sqlalchemy.exc import IntegrityError
-from app.utils.password import hash_password
+from utils.password import hash_password
 
 name = "Ahmed"
 username = "ahmed"
 password = "123"
-phone_number = "011"
+phone_number = "01111"
 role = "admin"
+target = 0
 
 session = SessionLocal()
 
@@ -24,7 +25,8 @@ try:
         username=username,
         password=hash_password(password),
         phone_number=phone_number,
-        role=role
+        role=role,
+        target=target
     )
 
     session.add(new_admin)

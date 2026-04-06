@@ -183,7 +183,7 @@
         <input type="date" name="current_date" id="date" readonly onfocus="this.blur()">
         <input name="customer_name" placeholder="اسم العميل" required autocomplete="off">
 
-        <input type="date" name="receive_date" required autocomplete="off">
+        <input type="time" name="receive_time" id="receive_time" readonly>
         <input name="customer_phone_number" placeholder="رقم الهاتف" required autocomplete="off">
         <input name="customer_email" placeholder="البريد الإلكتروني" required autocomplete="off">
 
@@ -296,4 +296,9 @@
             alert("تم الحفظ بنجاح");
             return;
         });
+
+        const now = new Date();
+        const time = now.toTimeString().slice(0, 5); // HH:MM
+        document.getElementById("receive_time").value = time;
+
     </script>
