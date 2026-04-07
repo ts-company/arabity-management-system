@@ -114,39 +114,38 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
     </style>
-
-    <head>
+</head>
 
     <body class="bg-black">
-        <div>
-            <div class="w-full max-w-2xl">
-                <div class="grid grid-cols-3 gap-6">
-                </div>
+        <div class="w-full max-w-2xl">
+            <div class="grid grid-cols-3 gap-6">
             </div>
-            <div class="form-section">
-                <h2>بحث الموظفين</h2>
-                <div>
-                    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
-                </div>
+        </div>
+        <div class="form-section">
+            <h2>بحث الموظفين</h2>
+            <div>
+                <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
             </div>
+        </div>
 
-            <div class="table-section">
-                <h2>جدول المرتبات</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>اسم الموظف</th>
-                            <th>رقم الهاتف</th>
-                            <th>الراتب</th>
-                            <th>الخصومات</th>
-                            <th>اجمالي الراتب</th>
-                        </tr>
-                    </thead>
-                    <tbody id="salary_forms"></tbody>
-                </table>
-            </div>
-</head>
+        <div class="table-section">
+            <h2>جدول المرتبات</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>اسم الموظف</th>
+                        <th>رقم الهاتف</th>
+                        <th>الراتب</th>
+                        <th>الخصومات</th>
+                        <th>اجمالي الراتب</th>
+                    </tr>
+                </thead>
+                <tbody id="salary_forms"></tbody>
+            </table>
+        </div>
+    </body>
+
 <script>
     let all_salary_forms = [];
 
@@ -232,3 +231,16 @@
     document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
     loadSalaryForms();
 </script>
+
+</html>
+
+
+[
+    {
+        employee_name: name,
+        employee_phone_number: number,
+        salary: salary,
+        deductions: deductions,
+        total_salary: total_salary
+    }
+]
