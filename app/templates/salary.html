@@ -114,66 +114,58 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
     </style>
-</head>
+
+    <head>
 
     <body class="bg-black">
-        <div class="w-full max-w-2xl">
-            <div class="grid grid-cols-3 gap-6">
+        <div>
+            <div class="w-full max-w-2xl">
+                <div class="grid grid-cols-3 gap-6">
+                </div>
             </div>
-        </div>
-        <div class="form-section">
-            <h2>بحث الموظفين</h2>
-            <div>
-                <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
+            <div class="form-section">
+                <h2>بحث الموظفين</h2>
+                <div>
+                    <input id="phoneSearchInput" placeholder="ابحث برقم الهاتف">
+                </div>
             </div>
-        </div>
 
-        <div class="table-section">
-            <h2>جدول المرتبات</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>اسم الموظف</th>
-                        <th>رقم الهاتف</th>
-                        <th>الراتب</th>
-                        <th>الخصومات</th>
-                        <th>اجمالي الراتب</th>
-                    </tr>
-                </thead>
-                <tbody id="salary_forms"></tbody>
-            </table>
-        </div>
-    </body>
-
+            <div class="table-section">
+                <h2>جدول المرتبات</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>اسم الموظف</th>
+                            <th>رقم الهاتف</th>
+                            <th>الراتب</th>
+                            <th>الخصومات</th>
+                            <th>اجمالي الراتب</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salary_forms"></tbody>
+                </table>
+            </div>
+</head>
 <script>
     let all_salary_forms = [];
 
+    // ✅ تحميل الداتا من الباك اند
     async function loadSalaryForms() {
-        const tbody = document.getElementById("salary_forms");
-        tbody.innerHTML = "";
-
         try {
-            const res = await fetch("http://localhost:8000/sales/get_approved", {
-                credentials: "include"
-            });
-
+            const res = await fetch("http://localhost:8000/salaries");
             const data = await res.json();
 
-            all_salary_forms = [
-                ...data.receiving,
-                ...data.comparison,
-                ...data.delivery,
-                ...data.booking
-            ];
-
+            all_salary_forms = data;
             render_salary_forms(all_salary_forms);
 
         } catch (e) {
-            alert("فشل التحميل");
+            console.log(e);
+            alert("فشل تحميل البيانات");
         }
     }
 
+    // ✅ عرض البيانات في الجدول
     function render_salary_forms(forms) {
         const tbody = document.getElementById("salary_forms");
         tbody.innerHTML = "";
@@ -181,32 +173,53 @@
         forms.forEach(form => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-             <td>${form.id}</td>
-             <td>${form.employee_name || "-"}</td>
-             <td>${form.employee_phone_number || "-"}</td>
-             <td class="salary">${form.salary || 0}</td>
+            <td>${form.id}</td>
+            <td>${form.employee_name || "-"}</td>
+            <td>${form.employee_phone_number || "-"}</td>
+            <td class="salary">${form.salary || 0}</td>
 
-    <td>
-        <input type="number" class="deductions" value="${form.deductions || 0}">
-    </td>
-
-    <td class="total">${form.total_salary || 0}</td>
+            <td>
+                <input type="number" class="deductions" value="${form.deductions || 0}">
+            </td>
+            <td class="total"></td>
         `;
             tbody.appendChild(tr);
-
         });
     }
 
+    // ✅ البحث برقم الهاتف
     function applySearch() {
         const phoneQuery = document.getElementById("phoneSearchInput").value.toLowerCase();
 
-        render_salary_forms(
-            all_salary_forms.filter(f =>
-                (f.employee_phone_number || "").toLowerCase().includes(phoneQuery)
-            )
+        const filtered = all_salary_forms.filter(f =>
+            (f.employee_phone_number || "").toLowerCase().includes(phoneQuery)
         );
+
+        render_salary_forms(filtered);
     }
 
+    // ✅ إرسال التعديلات للباك اند
+    async function sendDeductions(id, deductions) {
+        try {
+            const formData = new FormData();
+
+            formData.append("id", id);
+            formData.append("deductions", deductions);
+
+            const res = await fetch("http://localhost:8000/salaries", {
+                method: "POST", // أو PUT حسب الباك
+                body: formData // 👈 هنا بدل JSON
+            });
+
+            const result = await res.json();
+            console.log("تم الإرسال:", result);
+
+        } catch (error) {
+            console.log("Error:", error);
+        }
+    }
+
+    // ✅ تعديل الخصومات + حساب الإجمالي + إرسال
     document.addEventListener("input", function (e) {
         if (e.target.classList.contains("deductions")) {
 
@@ -215,7 +228,7 @@
             let salary = parseFloat(row.querySelector(".salary").innerText) || 0;
             let deductions = parseFloat(e.target.value) || 0;
 
-            // منع أي حاجة غير أرقام
+            // تنظيف الإدخال
             e.target.value = e.target.value.replace(/[^0-9]/g, '');
 
             if (deductions > salary) {
@@ -225,23 +238,16 @@
 
             let total = Math.max(0, salary - deductions);
             row.querySelector(".total").innerText = total;
+
+            // ✅ هنا المهم: نبعت الخصومات بس
+            sendDeductions(
+                parseInt(row.children[0].innerText),
+                deductions
+            );
         }
     });
 
     document.getElementById("phoneSearchInput").addEventListener("input", applySearch);
+
     loadSalaryForms();
 </script>
-
-</html>
-
-
-<!-- 
-[
-    {
-        employee_id: id,
-        employee_name: name,
-        employee_phone_number: number,
-        salary: salary,
-        deductions: deductions,
-    }
-] -->

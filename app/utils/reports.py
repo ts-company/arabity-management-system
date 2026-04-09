@@ -114,8 +114,8 @@ def calculate_parts_yearly(db: Session, dbModel):
 
 
 def calculate_daily(db: Session, dbModel):
-    # Get all rows for today
-    rows = db.query(dbModel.total_price).filter(
+
+    rows = db.query(dbModel.total_price, dbModel.current_date).filter(
         dbModel.current_date == date.today(),
         dbModel.approved.is_(True)
     ).all()
@@ -127,7 +127,13 @@ def calculate_daily(db: Session, dbModel):
     ).scalar()
 
     return {
-        "rows": [r.total_price for r in rows],
+        "rows": [
+        {
+            "total_price": r.total_price,
+            "current_date": r.current_date
+        }
+        for r in rows
+    ],
         "total": total
     }
 
@@ -136,7 +142,7 @@ def calculate_monthly(db: Session, dbModel):
     today = date.today()
     start_of_month = today.replace(day=1)
 
-    rows = db.query(dbModel.total_price).filter(
+    rows = db.query(dbModel.total_price, dbModel.current_date).filter(
         dbModel.current_date >= start_of_month,
         dbModel.current_date <= today,
         dbModel.approved.is_(True)
@@ -149,7 +155,13 @@ def calculate_monthly(db: Session, dbModel):
     ).scalar()
 
     return {
-        "rows": [r.total_price for r in rows],
+        "rows": [
+        {
+            "total_price": r.total_price,
+            "current_date": r.current_date
+        }
+        for r in rows
+    ],
         "total": total
     }
 
@@ -158,7 +170,7 @@ def calculate_yearly(db: Session, dbModel):
     today = date.today()
     start_of_year = date(today.year, 1, 1)
 
-    rows = db.query(dbModel.total_price).filter(
+    rows = db.query(dbModel.total_price, dbModel.current_date).filter(
         dbModel.current_date >= start_of_year,
         dbModel.current_date <= today,
         dbModel.approved.is_(True)
@@ -171,6 +183,12 @@ def calculate_yearly(db: Session, dbModel):
     ).scalar()
 
     return {
-        "rows": [r.total_price for r in rows],
+        "rows": [
+        {
+            "total_price": r.total_price,
+            "current_date": r.current_date
+        }
+        for r in rows
+    ],
         "total": total
     }

@@ -24,11 +24,14 @@ def save_form(db: Session,
               total_price: str,
               remains: Decimal,
               total_paid: Decimal,
+              payment_method: str,
               notes: str,
+              national_id: str,
               employee_name: str,
               created_by: str,
               approved: bool,
-              vip: bool):
+              vip: bool,
+              printed: bool):
 
     new_form = ReceivingForm(
         day=day,
@@ -46,13 +49,16 @@ def save_form(db: Session,
         category=category,
         fix_description=fix_description,
         total_price=total_price,
+        payment_method=payment_method,
         remains=remains,
         total_paid=total_paid,
         notes=notes,
+        national_id=national_id,
         employee_name=employee_name,
         created_by=created_by,
         approved=approved,
-        vip=vip
+        vip=vip,
+        printed=printed
     )
 
     db.add(new_form)

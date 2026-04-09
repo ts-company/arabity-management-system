@@ -5,7 +5,7 @@ from database import get_db
 from utils.auth import get_current_user
 from models.receivingForms_model import ReceivingForm
 from models.comparisonForms_model import ComparisonForm
-from models.deliveryForms_model import DeliveryForm
+from models.bookingForms_model import BookingForm
 from utils.reports import calculate_daily, calculate_monthly, calculate_yearly, calculate_parts_daily, calculate_parts_monthly, calculate_parts_yearly
 
 router = APIRouter(prefix="/reports")
@@ -22,7 +22,8 @@ def get_daily(request: Request,
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
     receive_revenue = calculate_daily(db, ReceivingForm)
     comparison_revenue = calculate_daily(db, ComparisonForm)
-    return {"receive": receive_revenue, "comparison": comparison_revenue}
+    booking_revenue = calculate_daily(db, BookingForm)
+    return {"receive": receive_revenue, "comparison": comparison_revenue, "booking": booking_revenue}
 
 @router.get("/get_monthly")
 def get_monthly(request: Request,
@@ -35,7 +36,8 @@ def get_monthly(request: Request,
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
     receive_revenue = calculate_monthly(db, ReceivingForm)
     comparison_revenue = calculate_monthly(db, ComparisonForm)
-    return {"receive": receive_revenue, "comparison": comparison_revenue}
+    booking_revenue = calculate_monthly(db, BookingForm)
+    return {"receive": receive_revenue, "comparison": comparison_revenue, "booking": booking_revenue}
 
 @router.get("/get_yearly")
 def get_yearly(request: Request,
@@ -48,7 +50,8 @@ def get_yearly(request: Request,
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
     receive_revenue = calculate_yearly(db, ReceivingForm)
     comparison_revenue = calculate_yearly(db, ComparisonForm)
-    return {"receive": receive_revenue, "comparison": comparison_revenue}
+    booking_revenue = calculate_yearly(db, BookingForm)
+    return {"receive": receive_revenue, "comparison": comparison_revenue, "booking": booking_revenue}
 
 @router.get("/parts")
 def get_parts_reports_page(request: Request):

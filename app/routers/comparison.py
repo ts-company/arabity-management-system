@@ -32,6 +32,7 @@ def fill_form(request: Request,
               category: str = Form(None),
               fix_description: str = Form(None),
               total_price: Decimal = Form(None),
+              payment_method: str = Form(...),
               db: Session = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
@@ -45,7 +46,7 @@ def fill_form(request: Request,
         vip = True
     form = save_form(db, day, current_date, customer_name, receive_time, customer_phone_number, customer_email, brand,
                      model, color, chassis_number, plate_number, mileage, category, fix_description, total_price,
-                     employee.name, created_by=employee.id, approved=False, vip=vip)
+                     payment_method, employee.name, created_by=employee.id, approved=False, vip=vip, printed=False)
     return {"details": "Success"}
 
 @router.delete("/delete_form/{id}")

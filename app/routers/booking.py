@@ -35,7 +35,8 @@ def save_bookingForm(
               mileage: Decimal = Form(None),
               category: str = Form(None),
               fix_description: str = Form(None),
-              total_price: Decimal = Form(None)):
+              total_price: Decimal = Form(None),
+              payment_mothod: str = Form(...)):
 
     token = request.cookies.get("access_token")
     if not token:
@@ -51,8 +52,8 @@ def save_bookingForm(
 
     booking_form = save_form(db, day, current_date, customer_name, receive_time, customer_phone_number,
                              customer_email, brand, model, color, chassis_number, plate_number, mileage,
-                             category, fix_description, total_price, employee.name, created_by=employee.id, approved=False,
-                             vip=vip)
+                             category, fix_description, total_price, payment_mothod, employee.name, created_by=employee.id,
+                             approved=False, vip=vip, printed=False)
 
     return {"details": "Form created"}
 

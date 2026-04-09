@@ -180,10 +180,10 @@
         <input name="day" id="day" placeholder="اليوم" readonly>
         <input type="date" name="current_date" id="date" readonly onfocus="this.blur()">
         <input name="customer_name" placeholder="اسم العميل" required autocomplete="off">
-
         <input type="time" name="receive_time" id="receive_time" readonly>
         <input name="customer_phone_number" placeholder="رقم الهاتف" required autocomplete="off">
         <input name="customer_email" placeholder="البريد الإلكتروني" required autocomplete="off">
+        <input name="national_id" placeholder="الرقم القومي" required autocomplete="off">
 
         <select id="brandSelect" name="brand" required autocomplete="off">
             <option value="" disabled selected hidden>نوع السيارة</option>
@@ -281,243 +281,218 @@
 
         <h2>السعر</h2>
 
-        <select class="price-select" id="paintSelect" data-category="paint">
-            <option value="" disabled selected hidden>رش و سمكرة</option>
-        </select>
+        <input type="text" class="pricetext" data-category="paint" placeholder="رش و سمكرة">
 
-        <select class="price-select" id="spotSelect" data-category="spot_repair">
-            <option value="" disabled selected hidden>Spot repair</option>
-        </select>
+        <input type="number" class="price-input" data-category="spot_repair" placeholder="Spot repair">
 
-        <select class="price-select" id="protectionSelect" data-category="protection">
-            <option value="" disabled selected hidden>Protction</option>
-        </select>
+        <input type="number" class="price-input" data-category="protection" placeholder="Protection">
 
-        <select class="price-select" data-category="belt">
-            <option value="" disabled selected hidden>حزام</option>
-        </select>
+        <input type="number" class="price-input" data-category="belt" placeholder="حزام">
 
-        <select class="price-select" data-category="complete_car">
-            <option value="" disabled selected hidden>سيارة كاملة</option>
-        </select>
+        <input type="number" class="price-input" data-category="complete_car" placeholder="سيارة كاملة">
 
         <input name="total_price" id="price" placeholder="السعر الاجمالي" readonly>
 
-        <input name="total_paid" id="paid_amount" type="number" step="0.01" placeholder="المبلغ المدفوع" required
-            autocomplete="off">
+        <input name="total_paid" id="paid_amount" type="number" step="0.01" placeholder="المبلغ المدفوع" required>
+
+        <select id="payment_method" name="payment_method" required autocomplete="off">
+            <option value="" disabled selected hidden>طريقة الدفع</option>
+            <option value="cash">كاش</option>
+            <option value="visa">فيزا</option>
+            <option value="instapay">انستاباي</option>
+        </select>
+
+
         <input name="remains" id="remaining" placeholder="المبلغ المتبقي" readonly>
 
-        <input name="notes" id="selected_prices" class="large-field" placeholder="ملاحظات" required autocomplete="off">
+        <input name="notes" id="selected_prices" class="large-field" placeholder="ملاحظات" required>
 
         <button type="submit">Submit</button>
-    </form>
 
-    <script>
-        new TomSelect("#brandSelect", {
-            create: false,
-            sortField: {
-                field: "text",
-                direction: "asc"
-            },
-            placeholder: "ابحث عن نوع السيارة"
-        });
-        function calculateTotalPrice() {
-            const selects = document.querySelectorAll(".price-select");
-            let total = 0;
+        <script>
 
-            selects.forEach(select => {
-                const value = parseFloat(select.value);
-                if (!isNaN(value)) {
-                    total += value;
-                }
+            // ================== TomSelect ==================
+            new TomSelect("#brandSelect", {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: "ابحث عن نوع السيارة"
             });
 
-            document.getElementById("price").value = total;
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".price-select").forEach(select => {
-                select.addEventListener("change", calculateTotalPrice);
-            });
-        });
 
-        const priceInput = document.getElementById("price");
-        const priceSelects = document.querySelectorAll(".price-select");
+            // ================== الأسعار (كلام + أرقام) ==================
+            const priceTextInput = document.getElementById("priceText"); // لو عندك input واحد للكتابة
+            const priceInputs = document.querySelectorAll(".price-input");
 
-        function updateRemaining() {
-            const total = priceInput.value;
-            const paidEl = document.getElementById('paid_amount');
-            const remainingEl = document.getElementById('remaining');
-            if (!remainingEl || !paidEl) return;
-            const paid = Number(paidEl.value) || 0;
-            if (Number.isNaN(total)) {
-                remainingEl.value = '';
-                remainingEl.placeholder = 'السعر غير محدد';
-                return;
+            const totalPriceInput = document.getElementById("price");
+            const paidInput = document.getElementById("paid_amount");
+            const remainingInput = document.getElementById("remaining");
+
+
+            // استخراج الأرقام من النص
+            function extractNumbers(text) {
+                const numbers = text.match(/\d+(\.\d+)?/g);
+                if (!numbers) return 0;
+
+                return numbers.reduce((sum, n) => sum + parseFloat(n), 0);
             }
-            let rem = total - paid;
-            if (rem < 0) rem = 0;
-            remainingEl.value = rem;
-        }
 
-        // react to price changes and paid amount input
-        priceSelects.forEach(s => s.addEventListener('change', updateRemaining));
-        document.getElementById('paid_amount').addEventListener('input', updateRemaining);
 
-        // ensure remaining is set on initial load if price is prefilled
-        updateRemaining();
+            // حساب الإجمالي
+            function calculateTotal() {
+                let total = 0;
 
-        function setLocalDayAndDate() {
+                // من inputs
+                priceInputs.forEach(input => {
+                    const val = parseFloat(input.value) || 0;
+                    total += val;
+                });
+
+                // لو عندك input فيه كلام + أرقام
+                if (priceTextInput) {
+                    total += extractNumbers(priceTextInput.value);
+                }
+
+                totalPriceInput.value = total;
+
+                calculateRemaining();
+            }
+
+
+            // حساب المتبقي
+            function calculateRemaining() {
+                const total = parseFloat(totalPriceInput.value) || 0;
+                const paid = parseFloat(paidInput.value) || 0;
+
+                let remaining = total - paid;
+                if (remaining < 0) remaining = 0;
+
+                remainingInput.value = remaining;
+            }
+
+
+            // ربط الأحداث
+            priceInputs.forEach(input => {
+                input.addEventListener("input", calculateTotal);
+            });
+
+            if (priceTextInput) {
+                priceTextInput.addEventListener("input", calculateTotal);
+            }
+
+            paidInput.addEventListener("input", calculateRemaining);
+
+
+            // تشغيل أول مرة
+            calculateTotal();
+
+
+            // ================== التاريخ ==================
+            function setLocalDayAndDate() {
+                const now = new Date();
+
+                const offset = now.getTimezoneOffset() * 60000;
+                const localNow = new Date(now.getTime() - offset);
+                const localISO = localNow.toISOString().slice(0, 10);
+
+                const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+
+                const dayEl = document.getElementById('day');
+                const dateEl = document.getElementById('date');
+
+                if (dayEl) dayEl.value = dayNames[now.getDay()];
+                if (dateEl) dateEl.value = localISO;
+            }
+
+            setLocalDayAndDate();
+
             const now = new Date();
+            const time = now.toTimeString().slice(0, 8); // HH:MM:SS
+            document.getElementById("receive_time").value = time;
 
-            // fix timezone offset to get local date
-            const offset = now.getTimezoneOffset() * 60000; // in ms
-            const localNow = new Date(now.getTime() - offset);
-            const localISO = localNow.toISOString().slice(0, 10); // "YYYY-MM-DD"
+            // ================== الإرسال ==================
+            document.getElementById("receiveForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
 
-            const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-            const dayEl = document.getElementById('day');
-            const dateEl = document.getElementById('date');
+                const formData = new FormData(e.target);
 
-            if (dayEl) dayEl.value = dayNames[now.getDay()]; // day name for current local date
-            if (dateEl) dateEl.value = localISO;
+                // categories
+                const selectedCategories = formData.getAll("category");
 
-            // Update day name if user manually changes the date
-            if (dateEl) {
-                dateEl.addEventListener('change', () => {
-                    const d = new Date(dateEl.value);
-                    if (!isNaN(d)) {
-                        if (dayEl) dayEl.value = dayNames[d.getDay()];
+                if (selectedCategories.length === 0) {
+                    alert("يجب اختيار بند واحد على الأقل");
+                    return;
+                }
+
+                // descriptions
+                const selectedDescriptions = Array.from(
+                    document.querySelectorAll(".description-checkbox:checked")
+                ).map(cb => cb.value);
+
+                formData.set("fix_description", selectedDescriptions.join(", "));
+
+                try {
+                    const res = await fetch("http://localhost:8000/receiving/save_form", {
+                        method: "POST",
+                        body: formData,
+                        credentials: "include"
+                    });
+
+                    if (!res.ok) {
+                        alert("فشل الحفظ");
+                        return;
                     }
-                });
-            }
-        }
 
-        setLocalDayAndDate();
+                    alert("تم الحفظ بنجاح");
 
-        document.getElementById("receiveForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(e.target);
-
-            const selectedCategories = formData.getAll("category");
-
-            if (selectedCategories.length === 0) {
-                alert("يجب اختيار بند واحد على الأقل");
-                return;
-            }
-
-
-            const selectedDescriptions = Array.from(
-                document.querySelectorAll(".description-checkbox:checked")
-            ).map(cb => cb.value);
-
-            formData.set("fix_description", selectedDescriptions.join(", "));
-
-            priceSelects.forEach((select, index) => {
-                if (select.value) {
-                    formData.append(`price_category_${index + 1}`, select.value);
+                } catch (err) {
+                    console.error(err);
+                    alert("خطأ في الاتصال");
                 }
             });
 
-            const res = await fetch("http://localhost:8000/receiving/save_form", {
-                method: "POST",
-                body: formData,
-                credentials: "include"
-            });
 
-            if (!res.ok) {
-                alert("فشل الحفظ");
-                return;
+            // ================== تحميل الوصف ==================
+            async function loadDescriptions() {
+                try {
+                    const res = await fetch("http://localhost:8000/prices/get_descriptions", {
+                        credentials: "include"
+                    });
+
+                    const descriptions = await res.json();
+                    const box = document.querySelector(".description-box");
+
+                    const hiddenInput = document.getElementById("descriptionsField");
+                    box.innerHTML = "";
+                    box.appendChild(hiddenInput);
+
+                    descriptions.forEach(desc => {
+                        const label = document.createElement("label");
+
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.value = desc.name;
+                        checkbox.classList.add("description-checkbox");
+
+                        label.appendChild(checkbox);
+                        label.appendChild(document.createTextNode(desc.name));
+
+                        box.appendChild(label);
+                    });
+
+                } catch (err) {
+                    console.error(err);
+                }
             }
 
-            alert("تم الحفظ بنجاح");
-        });
 
-        async function loadPricesIntoSelects() {
-            try {
-                const res = await fetch("http://localhost:8000/prices/get_prices", {
-                    credentials: "include"
-                });
+            // تشغيل
+            loadDescriptions();
 
-                if (!res.ok) throw new Error("Failed to load prices");
+        </script>
 
-                const prices = await res.json();
-
-                const selects = document.querySelectorAll(".price-select");
-
-                selects.forEach(select => {
-                    const placeholder = select.querySelector("option[disabled]");
-                    select.innerHTML = "";
-                    if (placeholder) select.appendChild(placeholder);
-                });
-
-                prices.forEach(price => {
-                    const select = document.querySelector(
-                        `.price-select[data-category="${price.category}"]`
-                    );
-
-                    if (!select) return;
-
-                    const option = document.createElement("option");
-                    option.value = price.price;
-                    option.textContent = `${price.name} - ${price.price}`;
-                    option.dataset.id = price.id;
-
-                    select.appendChild(option);
-                });
-
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        async function loadDescriptions() {
-            try {
-                const res = await fetch("http://localhost:8000/prices/get_descriptions", {
-                    credentials: "include"
-                });
-
-                if (!res.ok) throw new Error("Failed to load descriptions");
-
-                const descriptions = await res.json();
-                const box = document.querySelector(".description-box");
-
-                // keep the hidden input, remove everything else
-                const hiddenInput = document.getElementById("descriptionsField");
-                box.innerHTML = "";
-                box.appendChild(hiddenInput);
-
-                descriptions.forEach(desc => {
-                    const label = document.createElement("label");
-                    label.style.display = "flex";
-                    label.style.alignItems = "center";
-                    label.style.gap = "6px";
-
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "checkbox";
-                    checkbox.value = desc.name;
-                    checkbox.classList.add("description-checkbox");
-
-                    const text = document.createElement("span");
-                    text.textContent = desc.name;
-
-                    label.appendChild(checkbox);
-                    label.appendChild(text);
-                    box.appendChild(label);
-                });
-
-            } catch (err) {
-                console.error(err);
-            }
-        }
-
-        const now = new Date();
-        const time = now.toTimeString().slice(0, 5); // HH:MM
-        document.getElementById("receive_time").value = time;
-
-        loadDescriptions();
-        loadPricesIntoSelects();
-    </script>
 
 </body>
 

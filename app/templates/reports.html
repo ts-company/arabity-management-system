@@ -119,6 +119,7 @@
                     <tr>
                         <th>#</th>
                         <th>المبلغ</th>
+                        <th>التاريخ</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -134,6 +135,7 @@
                     <tr>
                         <th>#</th>
                         <th>المبلغ</th>
+                        <th>التاريخ</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -149,6 +151,7 @@
                     <tr>
                         <th>#</th>
                         <th>المبلغ</th>
+                        <th>التاريخ</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -189,24 +192,30 @@
                 tableComparison.innerHTML = "";
                 tableComparison.innerHTML = "";
                 // Receiving
-                data.receive.rows.forEach((price, i) => {
+                data.receive.rows.forEach((item, i) => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
                     tableReceive.appendChild(tr);
                 });
                 totalReceiveEl.textContent = data.receive.total;
 
                 // Comparison
-                data.comparison.rows.forEach((price, i) => {
+                data.comparison.rows.forEach((item, i) => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
                     tableComparison.appendChild(tr);
                 });
                 totalComparisonEl.textContent = data.comparison.total;
                 // booking
-                data.booking.rows.forEach((price, i) => {
+                data.booking.rows.forEach((item, i) => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
                     tableBooking.appendChild(tr);
                 });
                 totalBookingEl.textContent = data.booking.total;

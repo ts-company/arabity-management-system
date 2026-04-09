@@ -20,6 +20,7 @@ class BookingForm(Base):
     category = Column(String, nullable=False)
     fix_description = Column(String, nullable=False)
     total_price = Column(Numeric(12, 2), nullable=False)
+    payment_method = Column(String, nullable=False)
     employee_name = Column(String, nullable=False)
     created_by = Column(Integer, ForeignKey("employees.id"), nullable=False)
     approved = Column(Boolean, nullable=False)

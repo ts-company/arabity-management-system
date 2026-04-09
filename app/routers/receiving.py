@@ -36,7 +36,9 @@ def save_forms(request: Request,
               total_price: Decimal = Form(...),
               remains: Decimal = Form(None),
               total_paid: Decimal = Form(...),
+              payment_method: str = Form(...),
               notes: str = Form(None),
+              national_id = Form(...),
               db: Session = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
@@ -50,7 +52,8 @@ def save_forms(request: Request,
         vip = True
     form = save_form(db, day, current_date, customer_name, receive_time, customer_phone_number, customer_email, brand,
                      model, color, chassis_number, plate_number, mileage, category, fix_description, total_price,
-                      remains, total_paid, notes, employee.name, created_by=employee.id, approved=False, vip=vip)
+                     payment_method, remains, total_paid, notes, national_id, employee.name, created_by=employee.id,
+                     approved=False, vip=vip, printed=False)
 
     return {"details": "Form saved"}
 

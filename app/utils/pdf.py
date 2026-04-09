@@ -87,6 +87,10 @@ def draw_multiline_text(can, x, y, text, field_width, field_height, font_size=15
     w, h = p.wrap(field_width, field_height)
     p.drawOn(can, x, y - h)
 
+def draw_checkbox(can, x, y, size=12):
+    can.setFont("CustomFont", size)
+    can.drawCentredString(x, y - (size / 3), "✓")
+
 def generate_receiving_form_pdf(db: Session, form_id: int):
     TEMPLATE_PATH = BASE_DIR / "static" / "templates" / "reception.pdf"
     OUTPUT_DIR = BASE_DIR / "static"
@@ -124,7 +128,14 @@ def generate_receiving_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 380, 277, str(form.total_price), field_width=140)
     draw_smart_text(can, 70, 270, str(form.remains), field_width=100)
     draw_smart_text(can, 320, 250, str(form.total_paid), field_width=120)
+    if form.payment_method == "cash":
+        draw_checkbox(can, 113, 93)
+    elif form.payment_method == "visa":
+        draw_checkbox(can, 44, 93)
+    elif form.payment_method == "instapay":
+        draw_checkbox(can, 189, 93)
     draw_smart_text(can, 60, 210, form.notes, field_width=380)
+    draw_smart_text(can, 40, 132, form.national_id, field_width=130)
     draw_smart_text(can, 320, 105, form.employee_name, field_width=140)
 
     can.save()
@@ -170,6 +181,11 @@ def generate_booking_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 420, 500, form.category, field_width=120)
     draw_multiline_text(can, 230, 510, form.fix_description, field_width=140, field_height=160, font_size=13)
     draw_smart_text(can, 60, 500, str(form.total_price), field_width=120)
+    if form.payment_method == "cash":
+        draw_checkbox(can, 144, 99)
+    elif form.payment_method == "visa":
+        draw_checkbox(can, 80, 99)
+
     draw_smart_text(can, 340, 135, str(form.employee_name), field_width=140)
 
     can.save()
@@ -215,6 +231,10 @@ def generate_comparison_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 420, 485, form.category, field_width=120)
     draw_multiline_text(can, 230, 490, form.fix_description, field_width=140, field_height=160, font_size=13)
     draw_smart_text(can, 60, 485, str(form.total_price), field_width=120)
+    if form.payment_method == "cash":
+        draw_checkbox(can, 144, 99)
+    elif form.payment_method == "visa":
+        draw_checkbox(can ,80, 99)
     draw_smart_text(can, 370, 250, str(form.total_price), field_width=140)
     draw_smart_text(can, 420, 150, str(form.employee_name), field_width=130)
 
@@ -306,8 +326,8 @@ def generate_warranty_pdf(db: Session, form_id: int, dbModel):
     return f"/static/warranty_form_{form.id}.pdf"
 
 def generate_coordinate_grid():
-    TEMPLATE_PATH = "warranty.pdf"
-    OUTPUT_PATH = "warranty_grid_preview.pdf"
+    TEMPLATE_PATH = "comparison.pdf"
+    OUTPUT_PATH = "comparison_grid_preview.pdf"
 
     template_pdf = PdfReader(TEMPLATE_PATH)
     page = template_pdf.pages[0]
