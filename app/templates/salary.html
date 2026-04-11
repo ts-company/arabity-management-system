@@ -150,12 +150,13 @@
 <script>
     let all_salary_forms = [];
 
-    // ✅ تحميل الداتا من الباك اند
     async function loadSalaryForms() {
         try {
-            const res = await fetch("http://localhost:8000/salaries");
+            const res = await fetch("http://localhost:8000/salary/get_salaries", {
+                method: "GET",
+                credentials: "include"
+            });
             const data = await res.json();
-
             all_salary_forms = data;
             render_salary_forms(all_salary_forms);
 
@@ -174,12 +175,12 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
             <td>${form.id}</td>
-            <td>${form.employee_name || "-"}</td>
-            <td>${form.employee_phone_number || "-"}</td>
+            <td>${form.name || "-"}</td>
+            <td>${form.phone_number || "-"}</td>
             <td class="salary">${form.salary || 0}</td>
 
             <td>
-                <input type="number" class="deductions" value="${form.deductions || 0}">
+                <input type="number" class="deductions" value="${form.deduction || 0}">
             </td>
             <td class="total"></td>
         `;
@@ -203,12 +204,12 @@
         try {
             const formData = new FormData();
 
-            formData.append("id", id);
             formData.append("deductions", deductions);
 
-            const res = await fetch("http://localhost:8000/salaries", {
-                method: "POST", // أو PUT حسب الباك
-                body: formData // 👈 هنا بدل JSON
+            const res = await fetch("http://localhost:8000/salary/add_deduction/${id}", {
+                method: "PATCH",
+                credentials: "include",
+                body: formData
             });
 
             const result = await res.json();
@@ -219,7 +220,6 @@
         }
     }
 
-    // ✅ تعديل الخصومات + حساب الإجمالي + إرسال
     document.addEventListener("input", function (e) {
         if (e.target.classList.contains("deductions")) {
 

@@ -50,9 +50,12 @@ def save_forms(request: Request,
     vip = False
     if brand == "BMW" or brand == "Mercedes-Benz":
         vip = True
-    form = save_form(db, day, current_date, customer_name, receive_time, customer_phone_number, customer_email, brand,
-                     model, color, chassis_number, plate_number, mileage, category, fix_description, total_price,
-                     payment_method, remains, total_paid, notes, national_id, employee.name, created_by=employee.id,
+    form = save_form(db, day=day, current_date=current_date, customer_name=customer_name, receive_time=receive_time,
+                     customer_phone_number=customer_phone_number, customer_email=customer_email, brand=brand,
+                     model=model, color=color, chassis_number=chassis_number, plate_number=plate_number, mileage=mileage,
+                     category=category, fix_description=fix_description, total_price=total_price,
+                     remains=remains, total_paid=total_paid, payment_method=payment_method, notes=notes,
+                     national_id=national_id, employee_name=employee.name, created_by=employee.id,
                      approved=False, vip=vip, printed=False)
 
     return {"details": "Form saved"}

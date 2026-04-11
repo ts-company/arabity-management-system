@@ -89,7 +89,7 @@ def draw_multiline_text(can, x, y, text, field_width, field_height, font_size=15
 
 def draw_checkbox(can, x, y, size=12):
     can.setFont("CustomFont", size)
-    can.drawCentredString(x, y - (size / 3), "✓")
+    can.drawCentredString(x, y - (size / 3), "X")
 
 def generate_receiving_form_pdf(db: Session, form_id: int):
     TEMPLATE_PATH = BASE_DIR / "static" / "templates" / "reception.pdf"
@@ -114,7 +114,7 @@ def generate_receiving_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 400, 709, form.day, field_width=120)
     draw_smart_text(can, 210, 709, str(form.current_date), field_width=100)
     draw_smart_text(can, 290, 675, form.customer_name, field_width=200)
-    draw_smart_text(can, 90, 675, str(form.receive_date), field_width=80)
+    draw_smart_text(can, 90, 675, str(form.receive_time), field_width=80)
     draw_smart_text(can, 410, 640, form.customer_phone_number, field_width=90)
     draw_smart_text(can, 250, 640, form.brand, field_width=80)
     draw_smart_text(can, 130, 640, form.model, field_width=60)
@@ -170,7 +170,7 @@ def generate_booking_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 400, 709, form.day, field_width=120)
     draw_smart_text(can, 210, 709, str(form.current_date), field_width=100)
     draw_smart_text(can, 290, 670, form.customer_name, field_width=200)
-    draw_smart_text(can, 100, 670, str(form.receive_date), field_width=80)
+    draw_smart_text(can, 100, 670, str(form.receive_time), field_width=80)
     draw_smart_text(can, 410, 639, form.customer_phone_number, field_width=100)
     draw_smart_text(can, 250, 639, form.brand, field_width=90)
     draw_smart_text(can, 130, 639, form.model, field_width=60)
@@ -220,7 +220,7 @@ def generate_comparison_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 390, 699, form.day, field_width=130)
     draw_smart_text(can, 190, 699, str(form.current_date), field_width=120)
     draw_smart_text(can, 300, 660, form.customer_name, field_width=190)
-    draw_smart_text(can, 80, 660, str(form.receive_date), field_width=90)
+    draw_smart_text(can, 80, 660, str(form.receive_time), field_width=90)
     draw_smart_text(can, 410, 629, form.customer_phone_number, field_width=90)
     draw_smart_text(can, 250, 629, form.brand, field_width=90)
     draw_smart_text(can, 130, 629, form.model, field_width=60)
@@ -269,7 +269,7 @@ def generate_delivery_form_pdf(db: Session, form_id: int):
     draw_smart_text(can, 390, 690, form.day, field_width=120)
     draw_smart_text(can, 190, 690, str(form.current_date), field_width=110)
     draw_smart_text(can, 310, 650, form.customer_name, field_width=180)
-    draw_smart_text(can, 80, 650, str(form.receive_date), field_width=90)
+    draw_smart_text(can, 80, 650, str(form.receive_time), field_width=90)
     draw_smart_text(can, 410, 620, form.customer_phone_number, field_width=100)
     draw_smart_text(can, 240, 620, form.brand, field_width=100)
     draw_smart_text(can, 130, 620, form.model, field_width=70)
