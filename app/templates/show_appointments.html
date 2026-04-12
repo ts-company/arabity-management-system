@@ -128,10 +128,80 @@ tr:hover {
 tr.approved {
     background-color: rgba(255,215,0,0.08);
 }
+
+.calendar-section {
+    background-color: #000000;
+    border: 1px solid #333333;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.calendar button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #444444;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.calendar button:hover {
+    background-color: #555555;
+}
+
+.calendar button.has-appointment {
+    background-color: gold;
+    color: #000000;
+}
     </style>
 </head>
 
 <body>
+    <div class="calendar-section">
+        <h2>التقويم</h2>
+        <button onclick="showAllAppointments()">عرض الكل</button>
+        <div class="calendar">
+            <button id="day-1">1</button>
+            <button id="day-2">2</button>
+            <button id="day-3">3</button>
+            <button id="day-4">4</button>
+            <button id="day-5">5</button>
+            <button id="day-6">6</button>
+            <button id="day-7">7</button>
+            <button id="day-8">8</button>
+            <button id="day-9">9</button>
+            <button id="day-10">10</button>
+            <button id="day-11">11</button>
+            <button id="day-12">12</button>
+            <button id="day-13">13</button>
+            <button id="day-14">14</button>
+            <button id="day-15">15</button>
+            <button id="day-16">16</button>
+            <button id="day-17">17</button>
+            <button id="day-18">18</button>
+            <button id="day-19">19</button>
+            <button id="day-20">20</button>
+            <button id="day-21">21</button>
+            <button id="day-22">22</button>
+            <button id="day-23">23</button>
+            <button id="day-24">24</button>
+            <button id="day-25">25</button>
+            <button id="day-26">26</button>
+            <button id="day-27">27</button>
+            <button id="day-28">28</button>
+            <button id="day-29">29</button>
+            <button id="day-30">30</button>
+            <button id="day-31">31</button>
+        </div>
+    </div>
     <div class="form-section">
         <h2>بحث</h2>
         <div style="display:flex; gap:10px;">
@@ -156,12 +226,40 @@ tr.approved {
 
     <script>
         let appointments = [];
+        let allAppointments = [];
 
         async function loadAppointments() {
             const tbody = document.getElementById("appointmentsTable");
             tbody.innerHTML = "";
             const res = await fetch("http://localhost:8000/appointment/get_appointments", { credentials: "include" });
             appointments = await res.json();
+            allAppointments = [...appointments];
+            
+            // تحديد الأيام التي لها مواعيد
+            let daysWithAppointments = new Set();
+            appointments.forEach(form => {
+                if (form.current_date) {
+                    let parts = form.current_date.split('-');
+                    if (parts.length === 3) {
+                        let day = parseInt(parts[2]);
+                        if (!isNaN(day)) {
+                            daysWithAppointments.add(day);
+                        }
+                    }
+                }
+            });
+            
+            // إضافة كلاس و onclick للأزرار
+            for (let day = 1; day <= 31; day++) {
+                let btn = document.getElementById(`day-${day}`);
+                if (btn) {
+                    if (daysWithAppointments.has(day)) {
+                        btn.classList.add('has-appointment');
+                    }
+                    btn.onclick = () => filterByDay(day);
+                }
+            }
+            
             renderAppointments(appointments);
         }
 
@@ -183,6 +281,22 @@ tr.approved {
         `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function filterByDay(day) {
+            appointments = allAppointments.filter(form => {
+                if (!form.current_date) return false;
+                let parts = form.current_date.split('-');
+                if (parts.length !== 3) return false;
+                let formDay = parseInt(parts[2]);
+                return formDay === day;
+            });
+            renderAppointments(appointments);
+        }
+
+        function showAllAppointments() {
+            appointments = [...allAppointments];
+            renderAppointments(appointments);
         }
 
         function applySearch() {
