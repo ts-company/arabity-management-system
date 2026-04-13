@@ -183,7 +183,6 @@
         <input type="time" name="receive_time" id="receive_time" readonly>
         <input name="customer_phone_number" placeholder="رقم الهاتف" required autocomplete="off">
         <input name="customer_email" placeholder="البريد الإلكتروني" required autocomplete="off">
-        <input name="national_id" placeholder="الرقم القومي" required autocomplete="off">
 
         <select id="brandSelect" name="brand" required autocomplete="off">
             <option value="" disabled selected hidden>نوع السيارة</option>
@@ -286,19 +285,11 @@
 
         <input name="total_price" id="price" placeholder="السعر الاجمالي" readonly>
 
-        <input name="total_paid" id="paid_amount" type="number" step="0.01" placeholder="المبلغ المدفوع" required>
-
         <select id="payment_method" name="payment_method" required autocomplete="off">
             <option value="" disabled selected hidden>طريقة الدفع</option>
             <option value="cash">كاش</option>
             <option value="visa">فيزا</option>
-            <option value="instapay">انستاباي</option>
         </select>
-
-
-        <input name="remains" id="remaining" placeholder="المبلغ المتبقي" readonly>
-
-        <input name="notes" id="selected_prices" class="large-field" placeholder="ملاحظات" required>
 
         <button type="submit">Submit</button>
 
@@ -407,19 +398,6 @@
                 calculateRemaining();
             }
 
-            // حساب المتبقي
-            function calculateRemaining() {
-                const total = parseFloat(totalPriceInput.value) || 0;
-                const paid = parseFloat(paidInput.value) || 0;
-
-                let remaining = total - paid;
-                if (remaining < 0) remaining = 0;
-
-                remainingInput.value = remaining;
-            }
-
-            paidInput.addEventListener("input", calculateRemaining);
-
 
             // ================== التاريخ ==================
             function setLocalDayAndDate() {
@@ -466,7 +444,7 @@
                 formData.set("fix_description", selectedDescriptions.join(", "));
 
                 try {
-                    const res = await fetch("http://localhost:8000/receiving/save_form", {
+                    const res = await fetch("http://localhost:8000/booking/save_form", {
                         method: "POST",
                         body: formData,
                         credentials: "include"

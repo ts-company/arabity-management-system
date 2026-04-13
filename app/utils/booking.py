@@ -25,6 +25,7 @@ def save_form(db: Session,
               payment_method: str,
               employee_name: str,
               created_by: str,
+              approved: bool,
               vip: bool,
               printed: bool):
 
@@ -47,6 +48,7 @@ def save_form(db: Session,
         payment_method=payment_method,
         employee_name=employee_name,
         created_by=created_by,
+        approved=approved,
         vip=vip,
         printed=printed
     )

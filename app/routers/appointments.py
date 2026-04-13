@@ -53,9 +53,13 @@ def get_appointments(request: Request, db: Session = Depends(get_db)):
 
     today = date.today()
     start_of_month = today.replace(day=1)
+    if today.month == 12:
+        start_of_next_month = date(today.year + 1, 1, 1)
+    else:
+        start_of_next_month = date(today.year, today.month + 1, 1)
 
     appointments = db.query(Appointment).filter(Appointment.current_date >= start_of_month,
-                                                Appointment.current_date <= today).all()
+                                                Appointment.current_date < start_of_next_month).all()
     return [
         {
             "id": appointment.id,

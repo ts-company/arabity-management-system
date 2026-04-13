@@ -183,7 +183,6 @@
         <input type="time" name="receive_time" id="receive_time" readonly>
         <input name="customer_phone_number" placeholder="رقم الهاتف" required autocomplete="off">
         <input name="customer_email" placeholder="البريد الإلكتروني" required autocomplete="off">
-        <input name="national_id" placeholder="الرقم القومي" required autocomplete="off">
 
         <select id="brandSelect" name="brand" required autocomplete="off">
             <option value="" disabled selected hidden>نوع السيارة</option>
@@ -292,7 +291,7 @@
             <option value="" disabled selected hidden>طريقة الدفع</option>
             <option value="cash">كاش</option>
             <option value="visa">فيزا</option>
-            <option value="instapay">انستاباي</option>
+
         </select>
 
 
@@ -466,7 +465,7 @@
                 formData.set("fix_description", selectedDescriptions.join(", "));
 
                 try {
-                    const res = await fetch("http://localhost:8000/receiving/save_form", {
+                    const res = await fetch("http://localhost:8000/comparison/save_form", {
                         method: "POST",
                         body: formData,
                         credentials: "include"

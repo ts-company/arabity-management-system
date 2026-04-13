@@ -22,7 +22,8 @@ def save_form(db: Session,
               employee_name: str,
               created_by: str,
               approved: bool,
-              vip: bool):
+              vip: bool,
+              printed: bool):
 
     new_form = DeliveryForm(
         day=day,
@@ -40,7 +41,8 @@ def save_form(db: Session,
         employee_name=employee_name,
         created_by=created_by,
         approved=approved,
-        vip=vip
+        vip=vip,
+        printed=printed
     )
 
     db.add(new_form)
