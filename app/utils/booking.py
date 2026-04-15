@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.bookingForms_model import BookingForm
+from app.models.bookingForms_model import BookingForm
 from datetime import time, date
 from decimal import Decimal
-from config import BASE_DIR
+from app.config import BASE_DIR
 import os
 
 def save_form(db: Session,

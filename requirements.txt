@@ -1,0 +1,14 @@
+fastapi==0.95.2
+starlette==0.27.0
+uvicorn
+sqlalchemy
+reportlab
+pdfrw
+arabic-reshaper
+python-bidi
+bcrypt
+python-jose
+requests
+jinja2==3.0.3
+psycopg2
+python-multipart

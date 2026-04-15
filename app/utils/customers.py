@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.customers_model import Customer
+from app.models.customers_model import Customer
 
 def add_customer(db: Session,
                  name: str,

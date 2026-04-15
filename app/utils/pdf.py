@@ -3,12 +3,12 @@ from reportlab.lib import colors
 from pdfrw import PdfReader, PdfWriter, PageMerge
 from io import BytesIO
 from sqlalchemy.orm import Session
-from models.receivingForms_model import ReceivingForm
-from models.bookingForms_model import BookingForm
-from models.comparisonForms_model import ComparisonForm
-from models.deliveryForms_model import DeliveryForm
+from app.models.receivingForms_model import ReceivingForm
+from app.models.bookingForms_model import BookingForm
+from app.models.comparisonForms_model import ComparisonForm
+from app.models.deliveryForms_model import DeliveryForm
 from fastapi import HTTPException
-from config import BASE_DIR
+from app.config import BASE_DIR
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 import arabic_reshaper

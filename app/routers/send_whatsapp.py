@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Form, BackgroundTasks
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import get_db
-from utils.auth import get_current_user
-from models.receivingForms_model import ReceivingForm
-from models.comparisonForms_model import ComparisonForm
-from models.deliveryForms_model import DeliveryForm
-from models.bookingForms_model import BookingForm
-from models.customers_model import Customer
-from utils.send_whatsapp import send_messages
-
+from app.database import get_db
+from app.utils.auth import get_current_user
+from app.models.receivingForms_model import ReceivingForm
+from app.models.comparisonForms_model import ComparisonForm
+from app.models.deliveryForms_model import DeliveryForm
+from app.models.bookingForms_model import BookingForm
+from app.models.customers_model import Customer
+from app.utils.send_whatsapp import send_messages
+from app.config import BASE_DIR
 
 router = APIRouter(prefix="/send_whatsapp")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 @router.post("/send_message")
 def send(request: Request,

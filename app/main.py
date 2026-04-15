@@ -3,12 +3,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from database import engine, Base
-from routers import admin, cars, employees, login, manager, comparison, receiving, prices_description, sales, receptionist, customers, customer_support, booking, representative, appointments, delivery, reports, accountant, vip, send_whatsapp, salary
-from models import attendance_model, employees_model, cars_model, customers_model, description_model, prices_model, receivingForms_model, bookingForms_model, appointments_model, comparisonForms_model, deliveryForms_model
-from config import BASE_DIR
+from app.database import engine, Base
+from app.routers import admin, cars, employees, login, manager, comparison, receiving, prices_description, sales, receptionist, customers, customer_support, booking, representative, appointments, delivery, reports, accountant, vip, send_whatsapp, salary
+from app.models import attendance_model, employees_model, cars_model, customers_model, description_model, prices_model, receivingForms_model, bookingForms_model, appointments_model, comparisonForms_model, deliveryForms_model
+from app.config import BASE_DIR
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 app = FastAPI(
     title="Arabity System",

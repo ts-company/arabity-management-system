@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, Time, Boolean, Numeric, ForeignKey
 from sqlalchemy.dialects.postgresql import ARRAY
-from database import Base
+from app.database import Base
 
 class ReceivingForm(Base):
     __tablename__ = "receiving_forms"

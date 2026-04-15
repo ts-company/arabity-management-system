@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.receivingForms_model import ReceivingForm
-from config import BASE_DIR
+from app.models.receivingForms_model import ReceivingForm
+from app.config import BASE_DIR
 from datetime import date, time
 from decimal import Decimal
 import os

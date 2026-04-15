@@ -1,15 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import get_db
-from utils.auth import get_current_user
-from models.deliveryForms_model import DeliveryForm
-from models.receivingForms_model import ReceivingForm
-from models.comparisonForms_model import ComparisonForm
-from models.bookingForms_model import BookingForm
+from app.database import get_db
+from app.utils.auth import get_current_user
+from app.models.deliveryForms_model import DeliveryForm
+from app.models.receivingForms_model import ReceivingForm
+from app.models.comparisonForms_model import ComparisonForm
+from app.models.bookingForms_model import BookingForm
+from app.config import BASE_DIR
 
 router = APIRouter(prefix="/vip")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 @router.get("/get_pending_forms")
 def get_vip_forms(request: Request, db: Session = Depends(get_db)):

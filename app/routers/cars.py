@@ -4,13 +4,14 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from decimal import Decimal
 from datetime import date
-from utils.add_edit_car import add_car, edit_car, delete_car
-from utils.auth import get_current_user
-from models.cars_model import Car
-from database import get_db
+from app.utils.add_edit_car import add_car, edit_car, delete_car
+from app.utils.auth import get_current_user
+from app.models.cars_model import Car
+from app.database import get_db
+from app.config import BASE_DIR
 
 router = APIRouter(prefix="/cars")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 @router.post("/add_car")
 def add_cars(

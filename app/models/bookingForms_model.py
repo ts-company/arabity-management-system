@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Time, Numeric, Boolean, ForeignKey
-from database import Base
+from app.database import Base
 
 class BookingForm(Base):
     __tablename__ = "booking_forms"

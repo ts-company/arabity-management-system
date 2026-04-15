@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.prices_model import Price
+from app.models.prices_model import Price
 from decimal import Decimal
 
 def add_price(db: Session, category: str, name: str, price: Decimal):

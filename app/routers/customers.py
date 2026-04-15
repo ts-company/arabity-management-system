@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Form, Depends, HTTPException, status, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from utils.customers import add_customer, edit_customer, delete_customer
-from utils.auth import get_current_user
-from models.customers_model import Customer
-from models.receivingForms_model import ReceivingForm
-from models.deliveryForms_model import DeliveryForm
-from models.comparisonForms_model import ComparisonForm
-from models.bookingForms_model import BookingForm
-from database import get_db
+from app.utils.customers import add_customer, edit_customer, delete_customer
+from app.utils.auth import get_current_user
+from app.models.customers_model import Customer
+from app.models.receivingForms_model import ReceivingForm
+from app.models.deliveryForms_model import DeliveryForm
+from app.models.comparisonForms_model import ComparisonForm
+from app.models.bookingForms_model import BookingForm
+from app.database import get_db
+from app.config import BASE_DIR
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 router = APIRouter(prefix="/customers")
 
 @router.post("/add_future_customer")

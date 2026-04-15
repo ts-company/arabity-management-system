@@ -1,8 +1,9 @@
 from fastapi import Request, APIRouter, HTTPException, status
 from fastapi.templating import Jinja2Templates
-from utils.auth import get_current_user
+from app.utils.auth import get_current_user
+from app.config import BASE_DIR
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 router = APIRouter(prefix="/accountant")
 
 @router.get("/")

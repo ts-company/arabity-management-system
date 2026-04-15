@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Time, Boolean, Numeric, ForeignKey
-from database import Base
+from app.database import Base
 
 class ComparisonForm(Base):
     __tablename__ = "comparison_forms"

@@ -3,18 +3,17 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from decimal import Decimal
 from datetime import date, time
-from database import get_db
-from utils.auth import get_current_user
-from utils.delivery import save_form, delete_form
-from utils.pdf import generate_delivery_form_pdf
-from utils.email_utils import send_email
-from models.employees_model import Employee
-from config import BASE_DIR
-from models.deliveryForms_model import DeliveryForm
-
+from app.database import get_db
+from app.utils.auth import get_current_user
+from app.utils.delivery import save_form, delete_form
+from app.utils.pdf import generate_delivery_form_pdf
+from app.utils.email_utils import send_email
+from app.models.employees_model import Employee
+from app.config import BASE_DIR
+from app.models.deliveryForms_model import DeliveryForm
 
 router = APIRouter(prefix="/delivery")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 @router.post("/save_form")
 def fill_form(request: Request,

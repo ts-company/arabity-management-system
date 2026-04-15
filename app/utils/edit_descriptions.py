@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.description_model import Description
+from app.models.description_model import Description
 
 def add_description(db: Session, name: str):
     new_description = Description(

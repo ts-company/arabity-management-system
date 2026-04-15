@@ -2,15 +2,16 @@ from fastapi import APIRouter, Form, Depends, HTTPException, status, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from decimal import Decimal
-from utils.auth import get_current_user
-from utils.edit_prices import add_price, edit_price, delete_price
-from utils.edit_descriptions import add_description, delete_description
-from models.prices_model import Price
-from models.description_model import Description
-from database import get_db
+from app.utils.auth import get_current_user
+from app.utils.edit_prices import add_price, edit_price, delete_price
+from app.utils.edit_descriptions import add_description, delete_description
+from app.models.prices_model import Price
+from app.models.description_model import Description
+from app.database import get_db
+from app.config import BASE_DIR
 
 router = APIRouter(prefix="/prices")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 @router.post("/add_price")

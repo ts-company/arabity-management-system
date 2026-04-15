@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.appointments_model import Appointment
+from app.models.appointments_model import Appointment
 from datetime import date
 
 def add_appointment(db: Session,

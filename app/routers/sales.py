@@ -2,14 +2,15 @@ from fastapi import Request, APIRouter, HTTPException, status, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from database import get_db
-from models.receivingForms_model import ReceivingForm
-from models.comparisonForms_model import ComparisonForm
-from models.deliveryForms_model import DeliveryForm
-from models.bookingForms_model import BookingForm
-from utils.auth import get_current_user
+from app.database import get_db
+from app.models.receivingForms_model import ReceivingForm
+from app.models.comparisonForms_model import ComparisonForm
+from app.models.deliveryForms_model import DeliveryForm
+from app.models.bookingForms_model import BookingForm
+from app.utils.auth import get_current_user
+from app.config import BASE_DIR
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=BASE_DIR / "templates")
 router = APIRouter(prefix="/sales")
 
 @router.get("/", response_class=HTMLResponse)

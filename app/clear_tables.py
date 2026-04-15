@@ -6,7 +6,7 @@ from models.receivingForms_model import ReceivingForm
 session = SessionLocal()
 
 try:
-    session.execute(delete(Employee))
+    session.execute(delete(ReceivingForm))
     session.commit()
 finally:
     session.close()
