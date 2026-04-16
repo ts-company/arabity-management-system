@@ -22,7 +22,7 @@ class BookingForm(Base):
     total_price = Column(Numeric(12, 2), nullable=False)
     payment_method = Column(String, nullable=False)
     employee_name = Column(String, nullable=False)
-    created_by = Column(Integer, ForeignKey("employees.id"), nullable=False)
+    created_by = Column(Integer, ForeignKey("employees.id", ondelete="SET NULL"), nullable=False)
     approved = Column(Boolean, nullable=False)
     vip = Column(Boolean, nullable=False)
     printed = Column(Boolean, nullable=False)
