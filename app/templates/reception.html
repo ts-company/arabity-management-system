@@ -463,7 +463,9 @@
                     document.querySelectorAll(".description-checkbox:checked")
                 ).map(cb => cb.value);
 
-                formData.set("fix_description", selectedDescriptions.join(", "));
+                if (selectedDescriptions.length > 0) {
+                    formData.set("fix_description", selectedDescriptions.join(", "));
+                }
 
                 try {
                     const res = await fetch("http://localhost:8000/receiving/save_form", {
