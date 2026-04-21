@@ -173,7 +173,7 @@
         async function load_spare_parts() {
             const tbody = document.getElementById("available_forms");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/receiving/get_approved_parts_forms", { credentials: "include" });
+            const res = await fetch("/receiving/get_approved_parts_forms", { credentials: "include" });
             spare_parts = await res.json();
             render_spare_parts(spare_parts);
         }
@@ -203,7 +203,7 @@
 
         async function take_order(id) {
 
-            const res = await fetch(`http://localhost:8000/receiving/take_form/${id}`, {
+            const res = await fetch(`/receiving/take_form/${id}`, {
                 method: "PATCH",
                 credentials: "include",
             });
@@ -216,7 +216,7 @@
         async function load_my_forms() {
             const tbody = document.getElementById("my_forms");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/receiving/get_your_forms", { credentials: "include" });
+            const res = await fetch("/receiving/get_your_forms", { credentials: "include" });
             my_forms = await res.json();
             render_my_forms(my_forms);
         }
@@ -265,7 +265,7 @@
 
             try {
                 const res = await fetch(
-                    `http://localhost:8000/receiving/add_message/${id}`,
+                    `/receiving/add_message/${id}`,
                     {
                         method: "PATCH",
                         credentials: "include",

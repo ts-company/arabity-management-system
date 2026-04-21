@@ -64,7 +64,7 @@
             event.preventDefault();
             const message = document.getElementById('message').value;
             try {
-                const response = await fetch('http://localhost:8000/send_whatsapp/send_message', {
+                const response = await fetch('/send_whatsapp/send_message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

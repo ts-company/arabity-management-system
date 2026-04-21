@@ -156,7 +156,7 @@
         async function load_future_customers() {
             const tbody = document.getElementById("future_customers");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/customers/get_future_customers", { credentials: "include" });
+            const res = await fetch("/customers/get_future_customers", { credentials: "include" });
             future_customers = await res.json();
             render_future_customers(future_customers);
         }
@@ -178,7 +178,7 @@
         }
 
         async function customerCalled(id) {
-            const res = await fetch(`http://localhost:8000/customers/future_customer_called/${id}`, {
+            const res = await fetch(`/customers/future_customer_called/${id}`, {
                 method: "PATCH",
                 credentials: "include"
             });

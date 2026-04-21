@@ -201,7 +201,7 @@
         async function load_bookings() {
             const tbody = document.getElementById("bookings");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/booking/get_bookings", { credentials: "include" });
+            const res = await fetch("/booking/get_bookings", { credentials: "include" });
             bookings = await res.json();
             render_bookings(bookings);
         }
@@ -239,7 +239,7 @@
 
         async function deleteBooking(id) {
             if (!confirm("هل أنت متأكد؟")) return;
-            const res = await fetch(`http://localhost:8000/booking/delete_form/${id}`, {
+            const res = await fetch(`/booking/delete_form/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             });

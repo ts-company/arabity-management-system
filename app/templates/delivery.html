@@ -282,7 +282,7 @@
 
             const formData = new FormData(e.target);
 
-            const res = await fetch("http://localhost:8000/delivery/save_form", {
+            const res = await fetch("/delivery/save_form", {
                 method: "POST",
                 body: formData,
                 credentials: "include"

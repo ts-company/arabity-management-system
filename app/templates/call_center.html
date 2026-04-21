@@ -225,7 +225,7 @@
         async function loadcustomers() {
             const tbody = document.getElementById("call_center");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/customers/get_current_customers", { credentials: "include" });
+            const res = await fetch("/customers/get_current_customers", { credentials: "include" });
             all_customer = await res.json();
             render_customer(all_customer);
         }
@@ -272,7 +272,7 @@
         async function load_future_customers() {
             const tbody = document.getElementById("future_customers");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/customers/get_future_customers", { credentials: "include" });
+            const res = await fetch("/customers/get_future_customers", { credentials: "include" });
             future_customers = await res.json();
             render_future_customers(future_customers);
         }
@@ -307,12 +307,12 @@
 
         async function logout() {
             try {
-                await fetch("http://localhost:8000/logout", {
+                await fetch("/logout", {
                     method: "POST",
                     credentials: "include"
                 });
 
-                window.location.href = "http://localhost:8000";
+                window.location.href = "/";
             } catch (e) {
                 alert("Logout failed");
             }

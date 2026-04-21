@@ -211,7 +211,7 @@
                 tbody.innerHTML = "";
 
                 try {
-                    const res = await fetch("http://localhost:8000/vip/get_pending_forms", {
+                    const res = await fetch("/vip/get_pending_forms", {
                         credentials: "include"
                     });
 
@@ -275,16 +275,16 @@
                 let baseUrl = "";
                 switch (source) {
                     case "استلام":
-                        baseUrl = "http://localhost:8000/receiving/approve_form/";
+                        baseUrl = "/receiving/approve_form/";
                         break;
                     case "تسليم":
-                        baseUrl = "http://localhost:8000/delivery/approve_form/";
+                        baseUrl = "/delivery/approve_form/";
                         break;
                     case "مقايسة":
-                        baseUrl = "http://localhost:8000/comparison/approve_form/";
+                        baseUrl = "/comparison/approve_form/";
                         break;
                     case "حجز":
-                        baseUrl = "http://localhost:8000/booking/approve_form/";
+                        baseUrl = "/booking/approve_form/";
                         break;
                     default:
                         alert("مصدر غير معروف للموافقة");
@@ -317,7 +317,7 @@
                 tbody.innerHTML = "";
 
                 try {
-                    const res = await fetch("http://localhost:8000/vip/get_approved_forms", {
+                    const res = await fetch("/vip/get_approved_forms", {
                         credentials: "include"
                     });
 
@@ -384,16 +384,16 @@
 
                 switch (source) {
                     case "استلام":
-                        baseUrl = "http://localhost:8000/receiving/generate_pdf/";
+                        baseUrl = "/receiving/generate_pdf/";
                         break;
                     case "تسليم":
-                        baseUrl = "http://localhost:8000/delivery/generate_pdf/";
+                        baseUrl = "/delivery/generate_pdf/";
                         break;
                     case "مقايسة":
-                        baseUrl = "http://localhost:8000/comparison/generate_pdf/";
+                        baseUrl = "/comparison/generate_pdf/";
                         break;
                     case "حجز":
-                        baseUrl = "http://localhost:8000/booking/generate_pdf/";
+                        baseUrl = "/booking/generate_pdf/";
                         break;
                     default:
                         alert("مصدر غير معروف");
@@ -409,16 +409,16 @@
                 let baseUrl = "";
                 switch (source) {
                     case "استلام":
-                        baseUrl = "http://localhost:8000/receiving/delete_form/";
+                        baseUrl = "/receiving/delete_form/";
                         break;
                     case "تسليم":
-                        baseUrl = "http://localhost:8000/delivery/delete_form/";
+                        baseUrl = "/delivery/delete_form/";
                         break;
                     case "مقايسة":
-                        baseUrl = "http://localhost:8000/comparison/delete_form/";
+                        baseUrl = "/comparison/delete_form/";
                         break;
                     case "حجز":
-                        baseUrl = "http://localhost:8000/booking/delete_form/";
+                        baseUrl = "/booking/delete_form/";
                         break;
                 }
 

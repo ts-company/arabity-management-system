@@ -468,7 +468,7 @@
                 }
 
                 try {
-                    const res = await fetch("http://localhost:8000/receiving/save_form", {
+                    const res = await fetch("/receiving/save_form", {
                         method: "POST",
                         body: formData,
                         credentials: "include"
@@ -491,7 +491,7 @@
             // ================== تحميل الوصف ==================
             async function loadDescriptions() {
                 try {
-                    const res = await fetch("http://localhost:8000/prices/get_descriptions", {
+                    const res = await fetch("/prices/get_descriptions", {
                         credentials: "include"
                     });
 

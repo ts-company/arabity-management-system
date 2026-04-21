@@ -146,7 +146,7 @@ async function loadCars() {
     const tbody = document.getElementById("carsTable");
     tbody.innerHTML = "";
     try {
-        const res = await fetch("http://localhost:8000/cars/get_cars", { credentials:"include" });
+        const res = await fetch("/cars/get_cars", { credentials:"include" });
         allCars = await res.json();
         renderCars(allCars);
     } catch (e) {
@@ -225,7 +225,7 @@ document.getElementById("addCarForm").addEventListener("submit", async e => {
         }
     }
     try {
-        const res = await fetch("http://localhost:8000/cars/add_car", {
+        const res = await fetch("/cars/add_car", {
             method: "POST",
             body: formData,
             credentials: "include"
@@ -245,7 +245,7 @@ document.getElementById("addCarForm").addEventListener("submit", async e => {
 async function deleteCar(id) {
     if (!confirm("هل أنت متأكد؟")) return;
     try {
-        const res = await fetch(`http://localhost:8000/cars/delete_car/${id}`, {
+        const res = await fetch(`/cars/delete_car/${id}`, {
             method: "DELETE",
             credentials: "include"
         });
@@ -294,7 +294,7 @@ async function saveCar(id) {
     }
 
     try {
-        const res = await fetch(`http://localhost:8000/cars/edit_car/${id}`, {
+        const res = await fetch(`/cars/edit_car/${id}`, {
             method: "PATCH",
             body: formData,
             credentials: "include"

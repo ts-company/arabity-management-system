@@ -20,23 +20,23 @@
     <div class="min-h-screen flex items-center justify-center bg-black px-4 dir-rtl" dir="rtl">
         <div class="w-full max-w-2xl">
             <div class="grid grid-cols-1 gap-7">
-                <a href="http://localhost:8000/receiving"
+                <a href="/receiving"
                     class="bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-700 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg text-lg text-center no-underline block">
                     استلام
                 </a>
-                <a href="http://localhost:8000/delivery"
+                <a href="/delivery"
                     class="bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-700 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg text-lg text-center no-underline block">
                     تسليم
                 </a>
-                <a href="http://localhost:8000/comparison"
+                <a href="/comparison"
                     class="bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-700 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg text-lg text-center no-underline block">
                     مقايسة
                 </a>
-                <a href="http://localhost:8000/booking"
+                <a href="/booking"
                     class="bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-700 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg text-lg text-center no-underline block">
                     حجز موعد
                 </a>
-                <a href="http://localhost:8000/sales/get_approved_page"
+                <a href="/sales/get_approved_page"
                     class="bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-700 hover:to-gray-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg text-lg text-center no-underline block">
                     الاستمارات
                 </a>
@@ -46,12 +46,12 @@
     <script>
         async function logout() {
             try {
-                await fetch("http://localhost:8000/logout", {
+                await fetch("/logout", {
                     method: "POST",
                     credentials: "include"
                 });
 
-                window.location.href = "http://localhost:8000";
+                window.location.href = "/";
             } catch (e) {
                 alert("Logout failed");
             }

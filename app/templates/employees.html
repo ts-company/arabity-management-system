@@ -201,7 +201,7 @@ async function loadEmployees() {
     const tbody = document.getElementById("employeesTableBody");
     tbody.innerHTML = "";
     try {
-        const res = await fetch("http://localhost:8000/employees/get_employees", { credentials: "include" });
+        const res = await fetch("/employees/get_employees", { credentials: "include" });
         if(!res.ok) { const data = await res.json(); errorDiv.textContent = data.detail || "فشل في تحميل الموظفين"; return; }
         allEmployees = await res.json();
         renderEmployees(allEmployees);
@@ -270,7 +270,7 @@ document.getElementById("addEmployeeForm").addEventListener("submit", async (e) 
     }
 
     try {
-        const response = await fetch("http://localhost:8000/employees/add_employee", {
+        const response = await fetch("/employees/add_employee", {
             method: "POST",
             body: formData,
             credentials: "include"
@@ -332,7 +332,7 @@ async function saveEmployee(id) {
     }
 
     try {
-        const res = await fetch(`http://localhost:8000/employees/edit_employee/${id}`, {
+        const res = await fetch(`/employees/edit_employee/${id}`, {
             method: "PATCH",
             credentials: "include",
             body: formData
@@ -354,7 +354,7 @@ async function saveEmployee(id) {
 async function deleteEmployee(id){
     if(!confirm("هل أنت متأكد من الحذف؟")) return;
     try{
-        const res = await fetch(`http://localhost:8000/employees/delete_employee/${id}`, { method:"DELETE", credentials: "include" });
+        const res = await fetch(`/employees/delete_employee/${id}`, { method:"DELETE", credentials: "include" });
         if(!res.ok){ const e=await res.json(); errorDiv.textContent = e.detail||"فشل الحذف"; return; }
         loadEmployees();
     }catch(e){ errorDiv.textContent = e.message; }

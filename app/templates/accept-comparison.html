@@ -216,7 +216,7 @@
         async function loadPending() {
             const tbody = document.getElementById("pendingTable");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/comparison/get_pending_forms", { credentials: "include" });
+            const res = await fetch("/comparison/get_pending_forms", { credentials: "include" });
             pending_forms = await res.json();
             renderPending(pending_forms);
         }
@@ -258,7 +258,7 @@
         loadPending();
 
         async function accept(id) {
-            const res = await fetch(`http://localhost:8000/comparison/approve_form/${id}`, {
+            const res = await fetch(`/comparison/approve_form/${id}`, {
                 method: "PATCH",
                 credentials: "include"
             });
@@ -271,7 +271,7 @@
         async function loadApproved() {
             const tbody = document.getElementById("approvedTable");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/comparison/get_approved_forms", { credentials: "include" });
+            const res = await fetch("/comparison/get_approved_forms", { credentials: "include" });
             approved = await res.json();
             renderApproved(approved);
         }
@@ -301,7 +301,7 @@
             <td>${form.employee_name || "-"}</td>
             <td>${form.total_price || "-"}</td>
             <td>
-                <button onclick="window.open('http://localhost:8000/comparison/generate_pdf/${form.id}', '_blank')">PDF</button>
+                <button onclick="window.open('/comparison/generate_pdf/${form.id}', '_blank')">PDF</button>
                 <button onclick="deleteForm(${form.id})">حذف</button>
             </td>
         `;
@@ -312,7 +312,7 @@
 
         async function deleteForm(id) {
             if (!confirm("هل أنت متأكد؟")) return;
-            const res = await fetch(`http://localhost:8000/comparison/delete_form/${id}`, {
+            const res = await fetch(`/comparison/delete_form/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             });

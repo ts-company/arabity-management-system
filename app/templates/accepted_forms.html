@@ -156,7 +156,7 @@
         tbody.innerHTML = "";
 
         try {
-            const res = await fetch("http://localhost:8000/sales/get_approved", {
+            const res = await fetch("/sales/get_approved", {
                 credentials: "include"
             });
 
@@ -205,16 +205,16 @@
 
         switch (source) {
             case "استلام":
-                baseUrl = "http://localhost:8000/receiving/generate_pdf/";
+                baseUrl = "/receiving/generate_pdf/";
                 break;
             case "تسليم":
-                baseUrl = "http://localhost:8000/delivery/generate_pdf/";
+                baseUrl = "/delivery/generate_pdf/";
                 break;
             case "مقايسة":
-                baseUrl = "http://localhost:8000/comparison/generate_pdf/";
+                baseUrl = "/comparison/generate_pdf/";
                 break;
             case "حجز":
-                baseUrl = "http://localhost:8000/booking/generate_pdf/";
+                baseUrl = "/booking/generate_pdf/";
                 break;
             default:
                 alert("مصدر غير معروف");
@@ -232,16 +232,16 @@
         let baseUrl = "";
         switch (source) {
             case "استلام":
-                baseUrl = "http://localhost:8000/receiving/printed/";
+                baseUrl = "/receiving/printed/";
                 break;
             case "تسليم":
-                baseUrl = "http://localhost:8000/delivery/printed/";
+                baseUrl = "/delivery/printed/";
                 break;
             case "مقايسة":
-                baseUrl = "http://localhost:8000/comparison/printed/";
+                baseUrl = "/comparison/printed/";
                 break;
             case "حجز":
-                baseUrl = "http://localhost:8000/booking/printed/";
+                baseUrl = "/booking/printed/";
                 break;
             default:
                 alert("مصدر غير معروف");

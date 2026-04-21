@@ -85,43 +85,43 @@
     <nav>
         <img src="/static/assets/logo.jpeg" alt="Company Logo" class="logo" />
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/reports')">
+        <button class="nav-btn" onclick="loadPage('/reports')">
             التقارير
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/salary')">
+        <button class="nav-btn" onclick="loadPage('/salary')">
             المرتبات
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/receiving/forms_page')">
+        <button class="nav-btn" onclick="loadPage('/receiving/forms_page')">
             الاستلامات
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/comparison/get_page')">
+        <button class="nav-btn" onclick="loadPage('/comparison/get_page')">
             المقايسات
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/delivery/get_page')">
+        <button class="nav-btn" onclick="loadPage('/delivery/get_page')">
             التسليمات
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/booking/show_bookings_page')">
+        <button class="nav-btn" onclick="loadPage('/booking/show_bookings_page')">
             الحجوزات
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/appointment/show_appointments')">
+        <button class="nav-btn" onclick="loadPage('/appointment/show_appointments')">
             المواعيد
         </button>
         
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/prices')">
+        <button class="nav-btn" onclick="loadPage('/prices')">
             الأسعار
         </button>
 
-        <button class="nav-btn" onclick="loadPage('http://localhost:8000/customers')">
+        <button class="nav-btn" onclick="loadPage('/customers')">
             العملاء
         </button>
 
-        <!-- <button class="nav-btn" onclick="loadPage('http://localhost:8000/send_whatsapp')">
+        <!-- <button class="nav-btn" onclick="loadPage('/send_whatsapp')">
             رسائل
         </button> -->
         
@@ -131,7 +131,7 @@
     </nav>
 
     <main>
-        <iframe id="contentFrame" src="http://localhost:8000/reports"></iframe>
+        <iframe id="contentFrame" src="/reports"></iframe>
     </main>
 
     <script>
@@ -141,12 +141,12 @@
 
         async function logout() {
             try {
-                await fetch("http://localhost:8000/logout", {
+                await fetch("/logout", {
                     method: "POST",
                     credentials: "include"
                 });
 
-                window.location.href = "http://localhost:8000";
+                window.location.href = "/";
             } catch (e) {
                 alert("Logout failed");
             }

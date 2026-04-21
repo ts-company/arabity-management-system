@@ -252,7 +252,7 @@
         async function loadAppointments() {
             const tbody = document.getElementById("appointmentsTable");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/appointment/get_appointments", { credentials: "include" });
+            const res = await fetch("/appointment/get_appointments", { credentials: "include" });
             appointments = await res.json();
             allAppointments = [...appointments];
 
@@ -331,7 +331,7 @@
         }
 
         async function delete_appointment(id) {
-            const res = await fetch(`http://localhost:8000/appointment/delete_appointment/${id}`, {
+            const res = await fetch(`/appointment/delete_appointment/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             });

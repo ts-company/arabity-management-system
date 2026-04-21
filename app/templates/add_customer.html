@@ -169,7 +169,7 @@ tr:hover {
             const tbody = document.getElementById("customersTable");
             tbody.innerHTML = "";
             try {
-                const res = await fetch("http://localhost:8000/customers/get_future_customers", { credentials: "include" });
+                const res = await fetch("/customers/get_future_customers", { credentials: "include" });
                 allCustomers = await res.json();
                 renderCustomers(allCustomers);
             } catch (e) {
@@ -215,7 +215,7 @@ tr:hover {
             const formData = new FormData(e.target);
 
             try {
-                const res = await fetch("http://localhost:8000/customers/add_future_customer", {
+                const res = await fetch("/customers/add_future_customer", {
                     method: "POST",
                     body: formData,
                     credentials: "include"
@@ -234,7 +234,7 @@ tr:hover {
         async function deleteCustomer(id) {
             if (!confirm("هل أنت متأكد؟")) return;
             try {
-                const res = await fetch(`http://localhost:8000/customers/delete_future_customer/${id}`, {
+                const res = await fetch(`/customers/delete_future_customer/${id}`, {
                     method: "DELETE",
                     credentials: "include"
                 });
@@ -265,7 +265,7 @@ tr:hover {
             
             try {
 
-                const res = await fetch(`http://localhost:8000/customers/edit_future_customer/${id}`, {
+                const res = await fetch(`/customers/edit_future_customer/${id}`, {
                     method: "PATCH",
                     body: formData,
                     credentials: "include"

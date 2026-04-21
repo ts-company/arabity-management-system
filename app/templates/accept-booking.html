@@ -204,7 +204,7 @@ tr.approved {
         async function loadPending() {
             const tbody = document.getElementById("pendingTable");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/booking/get_pending_forms", { credentials: "include" });
+            const res = await fetch("/booking/get_pending_forms", { credentials: "include" });
             pending_forms = await res.json();
             renderPending(pending_forms);
         }
@@ -243,7 +243,7 @@ tr.approved {
         }
 
         async function accept(id) {
-            const res = await fetch(`http://localhost:8000/booking/approve_form/${id}`, {
+            const res = await fetch(`/booking/approve_form/${id}`, {
                 method: "PATCH",
                 credentials: "include"
             });
@@ -258,7 +258,7 @@ tr.approved {
         async function loadApproved() {
             const tbody = document.getElementById("approvedTable");
             tbody.innerHTML = "";
-            const res = await fetch("http://localhost:8000/booking/get_approved_forms", { credentials: "include" });
+            const res = await fetch("/booking/get_approved_forms", { credentials: "include" });
             approved = await res.json();
             renderApproved(approved);
         }
@@ -286,7 +286,7 @@ tr.approved {
             <td>${form.fix_description || "-"}</td>
             <td>${form.total_price || "-"}</td>
             <td>
-                <button onclick="window.open('http://localhost:8000/booking/generate_pdf/${form.id}', '_blank')">PDF</button>
+                <button onclick="window.open('/booking/generate_pdf/${form.id}', '_blank')">PDF</button>
                 <button onclick="deleteForm(${form.id})">حذف</button>
             </td>
         `;
@@ -297,7 +297,7 @@ tr.approved {
 
         async function deleteForm(id) {
             if (!confirm("هل أنت متأكد؟")) return;
-            const res = await fetch(`http://localhost:8000/booking/delete_form/${id}`, {
+            const res = await fetch(`/booking/delete_form/${id}`, {
                 method: "DELETE",
                 credentials: "include"
             });
