@@ -112,13 +112,30 @@
 
         <!-- Receiving Table -->
         <div class="table-section">
-            <h2>الاتسلامات</h2>
+            <h2>الاستلامات</h2>
             <div class="totals">المجموع: <span id="total-receive">0</span></div>
             <table id="table-receive">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>المبلغ</th>
+                        <th>التاريخ</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <!-- booking Table -->
+        <div class="table-section">
+            <h2>حجز الميعاد</h2>
+            <div class="totals">المجموع: <span id="total-booking">0</span></div>
+            <table id="table-booking">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>المبلغ</th>
+                        <th>التاريخ</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -134,6 +151,7 @@
                     <tr>
                         <th>#</th>
                         <th>المبلغ</th>
+                        <th>التاريخ</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -145,9 +163,11 @@
     <script>
         const tableReceive = document.querySelector("#table-receive tbody");
         const tableComparison = document.querySelector("#table-comparison tbody");
+        const tableBooking = document.querySelector("#table-booking tbody");
 
         const totalReceiveEl = document.getElementById("total-receive");
         const totalComparisonEl = document.getElementById("total-comparison");
+        const totalBookingEl = document.getElementById("total-booking");
 
         const btnDaily = document.getElementById("btn-daily");
         const btnMonthly = document.getElementById("btn-monthly");
@@ -170,21 +190,35 @@
                 // Clear old table rows
                 tableReceive.innerHTML = "";
                 tableComparison.innerHTML = "";
+                tableBooking.innerHTML = "";
                 // Receiving
-                data.receive.rows.forEach((price, i) => {
+                data.receive.rows.forEach((item, i) => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
                     tableReceive.appendChild(tr);
                 });
                 totalReceiveEl.textContent = data.receive.total;
 
                 // Comparison
-                data.comparison.rows.forEach((price, i) => {
+                data.comparison.rows.forEach((item, i) => {
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${i + 1}</td><td>${price}</td>`;
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
                     tableComparison.appendChild(tr);
                 });
                 totalComparisonEl.textContent = data.comparison.total;
+                // booking
+                data.booking.rows.forEach((item, i) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${i + 1}</td>
+                    <td>${item.total_price}</td>
+                    <td>${item.current_date}</td>`;
+                    tableBooking.appendChild(tr);
+                });
+                totalBookingEl.textContent = data.booking.total;
 
             } catch (e) {
                 console.error(e);
@@ -219,9 +253,6 @@
             setActive(btnYearly);
             loadReport("yearly");
         });
-
-        // Load daily report by default
-        loadReport("daily");
         async function logout() {
             try {
                 await fetch("/logout", {
@@ -234,6 +265,10 @@
                 alert("Logout failed");
             }
         }
+
+        // Load daily report by default
+        loadReport("daily");
+
     </script>
 </body>
 <a id="topLeftBtn"
