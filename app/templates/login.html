@@ -1,130 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login</title>
 
-    <style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
 * {
     box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
     margin: 0;
     height: 100vh;
-    background-color: #0f172a; /* dark background */
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #000;
 }
 
-/* Login container */
+/* subtle glow background */
+body::before {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 60%);
+    top: -200px;
+    left: -200px;
+    filter: blur(60px);
+}
+
 .login-container {
-    background-color: #000000; /* black card */
     width: 380px;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    border-left: 4px solid #1f2937; /* subtle dark gray accent instead of gold */
+    border-radius: 16px;
+
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
 }
 
-/* Title */
 h1 {
+    color: #fff;
     text-align: center;
-    color: #f1f5f9; /* white text */
-    margin-bottom: 30px;
-    font-size: 24px;
+    font-size: 26px;
+    margin-bottom: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
-/* Form group spacing */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
-/* Labels */
 label {
     display: block;
     margin-bottom: 6px;
-    font-weight: 600;
-    color: #f1f5f9; /* white/gray labels */
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
 }
 
-/* Inputs */
 input {
     width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background-color: #1e1e2a; /* dark gray inputs */
-    color: #f1f5f9; /* white text */
+    padding: 12px 14px;
+    border-radius: 10px;
+
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: #fff;
+    outline: none;
+
+    transition: 0.2s ease;
 }
 
 input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #3b4252; /* subtle gray focus */
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
 }
 
-/* Buttons */
 button {
     width: 100%;
     padding: 12px;
-    border-radius: 8px;
+    margin-top: 10px;
+
     border: none;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #000;
+
+    font-weight: 600;
     cursor: pointer;
-    background-color: #444444; /* gray button */
-    color: #f1f5f9; /* white text */
+
     transition: 0.2s ease;
 }
 
 button:hover {
-    background-color: #555555; /* slightly lighter gray on hover */
+    transform: translateY(-1px);
+    opacity: 0.9;
 }
 
-/* Error messages */
 .error {
-    color: #f87171; /* red for errors */
-    text-align: center;
     margin-top: 10px;
-    font-size: 14px;
+    text-align: center;
+    font-size: 13px;
+    color: #ff4d4d;
 }
-    </style>
+</style>
 </head>
 
 <body>
-    <div class="login-container">
-        <h1>Arabity</h1>
 
-        <form id="loginForm" method="POST" action="/login" enctype="application/x-www-form-urlencoded">
-            <div class="form-group">
-                <label>Username</label>
-                <input required type="text" name="username" id="username" required autocomplete="off"/>
-            </div>
+<div class="login-container">
+    <h1>Arabity</h1>
 
-            <div class="form-group">
-                <label>Password</label>
-                <input required type="password" name="password" id="password" required autocomplete="off"/>
-            </div>
+    <form method="POST" action="/login">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" required autocomplete="off"/>
+        </div>
 
-            <button type="submit">Login</button>
-            <div class="error" id="error">
-                {% if request.query_params.get("error") %}
-                    Invalid username or password
-                {% endif %}
-            </div>
-        </form>
-    </div>
-    <script>
-            window.addEventListener("DOMContentLoaded", () => {
-            const url = new URL(window.location);
-            if (url.searchParams.has("error")) {
-                url.searchParams.delete("error");
-                window.history.replaceState({}, document.title, url.pathname);
-            }
-            });
-    </script>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required autocomplete="off"/>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <div class="error">
+            {% if request.query_params.get("error") %}
+                Invalid username or password
+            {% endif %}
+        </div>
+    </form>
+</div>
+
 </body>
 </html>
