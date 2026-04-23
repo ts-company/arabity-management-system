@@ -67,7 +67,7 @@ def get_bookings(request: Request, db: Session = Depends(get_db)):
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    bookings = db.query(BookingForm).filter(BookingForm.approved.is_(True), BookingForm.vip.is_(False)).all()
+    bookings = db.query(BookingForm).filter(BookingForm.approved.is_(True), BookingForm.vip.is_(False)).order_by(BookingForm.current_date.desc(), BookingForm.id.desc()).all()
     return [
         {
             "id": booking.id,
@@ -99,7 +99,7 @@ def get_bookings(request: Request, db: Session = Depends(get_db)):
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    bookings = db.query(BookingForm).filter(BookingForm.approved.is_(False), BookingForm.vip.is_(False)).all()
+    bookings = db.query(BookingForm).filter(BookingForm.approved.is_(False), BookingForm.vip.is_(False)).order_by(BookingForm.current_date.desc(), BookingForm.id.desc()).all()
     return [
         {
             "id": booking.id,

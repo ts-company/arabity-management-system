@@ -103,7 +103,7 @@ def get_pending(request: Request,
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(DeliveryForm).filter(DeliveryForm.approved == False, DeliveryForm.vip.is_(False)).all()
+    forms = db.query(DeliveryForm).filter(DeliveryForm.approved == False, DeliveryForm.vip.is_(False)).order_by(DeliveryForm.current_date.desc(), DeliveryForm.id.desc()).all()
     return [
         {
             "id": form.id,
@@ -135,7 +135,7 @@ def get_pending(request: Request,
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(DeliveryForm).filter(DeliveryForm.approved == True, DeliveryForm.vip.is_(False)).all()
+    forms = db.query(DeliveryForm).filter(DeliveryForm.approved == True, DeliveryForm.vip.is_(False)).order_by(DeliveryForm.current_date.desc(), DeliveryForm.id.desc()).all()
     return [
         {
             "id": form.id,

@@ -71,7 +71,7 @@ def get_form(request: Request,
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(ReceivingForm).filter(ReceivingForm.approved.is_(False), ReceivingForm.vip.is_(False)).all()
+    forms = db.query(ReceivingForm).filter(ReceivingForm.approved.is_(False), ReceivingForm.vip.is_(False)).order_by(ReceivingForm.current_date.desc(), ReceivingForm.id.desc()).all()
 
     return [
         {
@@ -110,7 +110,7 @@ def get_form(request: Request,
     if payload["role"] not in ("admin", "manager", "representative"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(ReceivingForm).filter(ReceivingForm.approved == True, ReceivingForm.vip.is_(False)).all()
+    forms = db.query(ReceivingForm).filter(ReceivingForm.approved == True, ReceivingForm.vip.is_(False)).order_by(ReceivingForm.current_date.desc(), ReceivingForm.id.desc()).all()
     return [
         {
             "id": form.id,

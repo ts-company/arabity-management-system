@@ -110,7 +110,7 @@ def get_pending(request: Request,
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(ComparisonForm).filter(ComparisonForm.approved == False, ComparisonForm.vip.is_(False)).all()
+    forms = db.query(ComparisonForm).filter(ComparisonForm.approved == False, ComparisonForm.vip.is_(False)).order_by(ComparisonForm.current_date.desc(), ComparisonForm.id.desc()).all()
     return [
         {
             "id": form.id,
@@ -145,7 +145,7 @@ def get_pending(request: Request,
     if payload["role"] not in ("admin", "manager"):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
 
-    forms = db.query(ComparisonForm).filter(ComparisonForm.approved == True, ComparisonForm.vip.is_(False)).all()
+    forms = db.query(ComparisonForm).filter(ComparisonForm.approved == True, ComparisonForm.vip.is_(False)).order_by(ComparisonForm.current_date.desc(), ComparisonForm.id.desc()).all()
     return [
         {
             "id": form.id,
