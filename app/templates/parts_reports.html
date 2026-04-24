@@ -92,7 +92,47 @@ th {
 tr:hover {
     background: #1f2633;
 }
-</style>
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .button-group button {
+                flex: none;
+                width: 100%;
+            }
+            
+            .totals {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .total-card {
+                padding: 15px;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .button-group button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>

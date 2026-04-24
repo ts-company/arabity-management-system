@@ -148,6 +148,41 @@
         .top-right-btn:hover {
             background-color: #aaaaaa;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section,
+            .table-section {
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+            
+            input {
+                width: 100%;
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            
+            .top-left-btn, .top-right-btn {
+                position: static;
+                margin: 5px 0;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 

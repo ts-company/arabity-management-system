@@ -167,6 +167,58 @@
         .ts-control input::placeholder {
             color: #9ca3af;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            form {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            button {
+                grid-column: span 1;
+            }
+            
+            h2 {
+                grid-column: span 1;
+            }
+            
+            .description-box {
+                grid-template-columns: 1fr;
+                grid-column: span 1;
+            }
+            
+            .category-box {
+                grid-template-columns: 1fr;
+                grid-column: span 1;
+            }
+            
+            .large-field {
+                grid-column: span 1;
+            }
+            
+            input, select, button {
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .desc-item, .category-item {
+                padding: 6px 8px;
+                font-size: 14px;
+            }
+            
+            .ts-control {
+                padding: 8px;
+            }
+            
+            .ts-dropdown .option {
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>

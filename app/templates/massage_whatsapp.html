@@ -23,7 +23,36 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
     }
-</style>
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            form {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .max-w-md {
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            textarea {
+                font-size: 16px;
+            }
+            
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
 
 <body>
 

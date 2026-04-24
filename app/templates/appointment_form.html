@@ -93,6 +93,40 @@
             color: #e6e6e6;
             border: 1px solid #2a2f3a;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            form {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            button {
+                grid-column: span 1;
+            }
+            
+            h2 {
+                grid-column: span 1;
+            }
+            
+            .description-box {
+                grid-template-columns: 1fr;
+                grid-column: span 1;
+            }
+            
+            .large-field {
+                grid-column: span 1;
+            }
+            
+            input, select, button {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 

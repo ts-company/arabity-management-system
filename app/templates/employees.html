@@ -127,7 +127,38 @@ tr:hover {
     margin-top: 5px;
 }
 .error { color: #f87171; margin-bottom: 10px; }
-</style>
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section,
+            .table-section {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 4px;
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 4px 6px;
+                font-size: 14px;
+            }
+            
+            input, select {
+                padding: 4px 6px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container">

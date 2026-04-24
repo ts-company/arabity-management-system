@@ -6,6 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .min-h-screen {
+                padding: 20px;
+            }
+            
+            .max-w-2xl {
+                max-width: 100%;
+            }
+            
+            button[onclick="logout()"] {
+                position: static;
+                margin: 10px 0;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>

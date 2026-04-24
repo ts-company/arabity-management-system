@@ -123,6 +123,37 @@
             gap: 6px;
             flex-wrap: wrap;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section,
+            .table-section {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 4px;
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 4px 6px;
+                font-size: 14px;
+            }
+            
+            input, select {
+                padding: 4px 6px;
+            }
+        }
     </style>
 </head>
 

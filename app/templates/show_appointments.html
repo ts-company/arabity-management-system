@@ -180,6 +180,40 @@
             background-color: gold;
             color: #000000;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section,
+            .table-section,
+            .calendar-section {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .form-section div[style*="display:flex"] input {
+                width: 100%;
+            }
+            
+            th, td {
+                padding: 4px;
+                font-size: 14px;
+            }
+            
+            button {
+                padding: 4px 6px;
+                font-size: 14px;
+            }
+            
+            .calendar button {
+                padding: 4px 6px;
+                min-width: 35px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
