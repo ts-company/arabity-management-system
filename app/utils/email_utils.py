@@ -3,10 +3,10 @@ import os
 import base64
 from io import BytesIO
 
-BREVO_API_KEY = "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"
-BREVO_URL = "https://api.brevo.com/v3/smtp/email"
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
 
-SENDER_EMAIL = "ahmeddad334@gmail.com"
+BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 def send_email(
     to: str,
@@ -18,7 +18,7 @@ def send_email(
         payload = {
             "sender": {
                 "email": SENDER_EMAIL,
-                "name": "Arabity",
+                "name": "ArabityEG",
             },
             "to": [{"email": to}],
             "subject": subject,
@@ -32,6 +32,7 @@ def send_email(
             }]
 
         headers = {
+            "accept": "application/json",
             "api-key": BREVO_API_KEY,
             "Content-Type": "application/json",
         }

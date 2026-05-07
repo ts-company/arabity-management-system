@@ -115,7 +115,6 @@ def get_form(request: Request,
     if limit > 0:
         query = query.limit(limit)
     forms = query.all()
-    print(f"Number of results: {len(forms)}")
     return [
         {
             "id": form.id,
@@ -172,7 +171,7 @@ def approve_forms(id: int,
 
     if form.customer_email:
         pdf_stream = generate_receiving_form_pdf(db, form.id)
-        send_email(form.customer_email, subject="شكرا لتواصلك معنا", body="استمارة الاستلام", pdf_stream=pdf_stream)
+        send_email(form.customer_email, subject="شكرا لتعاملك معنا", body="استمارة الاستلام", pdf_stream=pdf_stream)
     return {"details": "Success"}
 
 @router.get("/generate_pdf/{id}")
